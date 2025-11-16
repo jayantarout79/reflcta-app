@@ -1,0 +1,352 @@
+import { addDays, subDays } from "date-fns";
+import {
+  type Client,
+  type DashboardMetrics,
+  type DocumentFile,
+  type Employee,
+  type Lead,
+  type Project,
+  type Task,
+  type TimeEntry,
+  type Invoice,
+  type Expense,
+  type UserProfile,
+} from "@/lib/types";
+
+const now = new Date();
+const iso = (date: Date) => date.toISOString();
+
+export const demoUser: UserProfile = {
+  id: "user-demo",
+  name: "Ava Martinez",
+  email: "ava.martinez@yuktra.ai",
+  role: "admin",
+  jobTitle: "Head of Delivery",
+};
+
+export const demoLeads: Lead[] = [
+  {
+    id: "lead-1",
+    name: "Leo Park",
+    company: "Nova Logistics",
+    email: "leo@novalogistics.com",
+    phone: "+1 202 555 0191",
+    country: "USA",
+    industry: "Logistics",
+    source: "LinkedIn",
+    status: "Contacted",
+    notes: "Needs AI routing assistant pilot.",
+    nextFollowUp: iso(addDays(now, 3)),
+    createdAt: iso(subDays(now, 10)),
+    updatedAt: iso(now),
+  },
+  {
+    id: "lead-2",
+    name: "Sarla Ben",
+    company: "Helix Health",
+    email: "sarla@helixhealth.io",
+    country: "Canada",
+    industry: "Healthcare",
+    source: "Referral",
+    status: "Proposal Sent",
+    notes: "Sent proposal for patient triage automation.",
+    nextFollowUp: iso(addDays(now, 1)),
+    createdAt: iso(subDays(now, 21)),
+    updatedAt: iso(subDays(now, 2)),
+  },
+  {
+    id: "lead-3",
+    name: "Abdul Kader",
+    company: "Desert Manufacturing",
+    email: "abdul@desertmfg.co",
+    country: "UAE",
+    industry: "Manufacturing",
+    source: "Website",
+    status: "New",
+    notes: "Requested discovery call.",
+    createdAt: iso(subDays(now, 5)),
+    updatedAt: iso(subDays(now, 5)),
+  },
+];
+
+export const demoEmployees: Employee[] = [
+  {
+    id: "emp-1",
+    name: "Riya Sen",
+    email: "riya@yuktra.ai",
+    role: "manager",
+    jobTitle: "Engagement Manager",
+    location: "Austin, TX",
+    employmentType: "Full-time",
+    status: "Active",
+    joinDate: iso(subDays(now, 400)),
+    salary: 165000,
+    skills: ["AI Strategy", "Solution Design"],
+  },
+  {
+    id: "emp-2",
+    name: "Jonas Kim",
+    email: "jonas@yuktra.ai",
+    role: "employee",
+    jobTitle: "Applied Scientist",
+    location: "Remote - LATAM",
+    employmentType: "Full-time",
+    status: "Active",
+    joinDate: iso(subDays(now, 250)),
+    salary: 145000,
+    skills: ["LLMs", "Data Engineering"],
+  },
+  {
+    id: "emp-3",
+    name: "Maria Ramos",
+    email: "maria@yuktra.ai",
+    role: "employee",
+    jobTitle: "AI Project Manager",
+    location: "Madrid, ES",
+    employmentType: "Full-time",
+    status: "On Leave",
+    salary: 98000,
+    joinDate: iso(subDays(now, 720)),
+  },
+];
+
+export const demoProjects: Project[] = [
+  {
+    id: "proj-1",
+    name: "Vision QA Automation",
+    clientId: "client-1",
+    clientName: "Helix Health",
+    category: "AI automation",
+    description: "Automated visual QA for lab diagnostics",
+    status: "In Progress",
+    priority: "High",
+    startDate: iso(subDays(now, 60)),
+    targetEndDate: iso(addDays(now, 30)),
+    ownerId: "emp-1",
+    ownerName: "Riya Sen",
+    budget: 220000,
+    tags: ["vision", "healthcare"],
+  },
+  {
+    id: "proj-2",
+    name: "Conversational Commerce Copilot",
+    clientId: "client-2",
+    clientName: "Northwind Retail",
+    category: "Consulting",
+    description: "LLM based commerce assistant for store teams",
+    status: "Planned",
+    priority: "Medium",
+    startDate: iso(addDays(now, 15)),
+    targetEndDate: iso(addDays(now, 120)),
+    ownerId: "emp-2",
+    ownerName: "Jonas Kim",
+    tags: ["llm", "retail"],
+  },
+];
+
+export const demoTasks: Task[] = [
+  {
+    id: "task-1",
+    title: "Fine tune safety guardrails",
+    projectId: "proj-1",
+    projectName: "Vision QA Automation",
+    assigneeId: "emp-2",
+    assigneeName: "Jonas Kim",
+    status: "In Progress",
+    priority: "High",
+    startDate: iso(subDays(now, 4)),
+    dueDate: iso(addDays(now, 5)),
+    estimatedHours: 32,
+    loggedHours: 12,
+  },
+  {
+    id: "task-2",
+    title: "Prepare kick-off agenda",
+    projectId: "proj-2",
+    projectName: "Conversational Commerce Copilot",
+    assigneeId: "emp-1",
+    assigneeName: "Riya Sen",
+    status: "To Do",
+    priority: "Medium",
+    estimatedHours: 8,
+    loggedHours: 0,
+  },
+];
+
+export const demoTimeEntries: TimeEntry[] = [
+  {
+    id: "time-1",
+    taskId: "task-1",
+    employeeId: "emp-2",
+    employeeName: "Jonas Kim",
+    date: iso(subDays(now, 1)),
+    hours: 6,
+    notes: "Model evaluation + dataset cleaning",
+  },
+];
+
+export const demoInvoices: Invoice[] = [
+  {
+    id: "INV-2045",
+    clientId: "client-1",
+    clientName: "Helix Health",
+    projectId: "proj-1",
+    projectName: "Vision QA Automation",
+    issueDate: iso(subDays(now, 12)),
+    dueDate: iso(addDays(now, 18)),
+    currency: "USD",
+    status: "Sent",
+    notes: "Milestone 2 deliverable",
+    total: 75000,
+    lineItems: [
+      {
+        id: "item-1",
+        description: "Model development sprint",
+        quantity: 1,
+        unitPrice: 65000,
+        subtotal: 65000,
+      },
+      {
+        id: "item-2",
+        description: "Experiment infra",
+        quantity: 1,
+        unitPrice: 10000,
+        subtotal: 10000,
+      },
+    ],
+  },
+  {
+    id: "INV-2044",
+    clientId: "client-2",
+    clientName: "Northwind Retail",
+    issueDate: iso(subDays(now, 50)),
+    dueDate: iso(subDays(now, 20)),
+    currency: "USD",
+    status: "Paid",
+    paymentDate: iso(subDays(now, 10)),
+    total: 54000,
+    lineItems: [
+      {
+        id: "item-3",
+        description: "Discovery retainer",
+        quantity: 1,
+        unitPrice: 54000,
+        subtotal: 54000,
+      },
+    ],
+  },
+];
+
+export const demoExpenses: Expense[] = [
+  {
+    id: "exp-1",
+    date: iso(subDays(now, 2)),
+    amount: 2400,
+    currency: "USD",
+    category: "Software",
+    projectId: "proj-1",
+    projectName: "Vision QA Automation",
+    vendor: "Scale GPU Cloud",
+    notes: "GPU burst capacity",
+  },
+  {
+    id: "exp-2",
+    date: iso(subDays(now, 15)),
+    amount: 1200,
+    currency: "USD",
+    category: "Travel",
+    projectId: "proj-2",
+    projectName: "Conversational Commerce Copilot",
+    vendor: "Delta Airlines",
+    notes: "Client onsite kickoff",
+  },
+];
+
+export const demoClients: Client[] = [
+  {
+    id: "client-1",
+    name: "Helix Health",
+    company: "Helix Health Systems",
+    website: "https://helixhealth.example",
+    primaryContact: "Dr. Lila Cohen",
+    email: "lila@helixhealth.com",
+    country: "USA",
+    timezone: "EST",
+    industry: "Healthcare",
+    relationshipStatus: "Active",
+    notes: "Expanding automation footprint.",
+  },
+  {
+    id: "client-2",
+    name: "Northwind Retail",
+    company: "Northwind Group",
+    website: "https://northwind.com",
+    primaryContact: "Miguel Santos",
+    email: "miguel@northwind.com",
+    country: "USA",
+    timezone: "PST",
+    industry: "Retail",
+    relationshipStatus: "Active",
+  },
+];
+
+export const demoFiles: DocumentFile[] = [
+  {
+    id: "doc-1",
+    fileName: "Helix_MSA.pdf",
+    storagePath: "clients/client-1/Helix_MSA.pdf",
+    linkedType: "Client",
+    linkedEntityId: "client-1",
+    category: "Contract",
+    uploadedBy: "Riya Sen",
+    uploadedAt: iso(subDays(now, 100)),
+  },
+  {
+    id: "doc-2",
+    fileName: "VisionQA_M2_Invoice.pdf",
+    storagePath: "invoices/INV-2045.pdf",
+    linkedType: "Invoice",
+    linkedEntityId: "INV-2045",
+    category: "Invoice PDF",
+    uploadedBy: "Finance Bot",
+    uploadedAt: iso(subDays(now, 11)),
+  },
+];
+
+export const demoDashboard: DashboardMetrics = {
+  totalClients: demoClients.length,
+  activeClients: 2,
+  totalProjects: demoProjects.length,
+  revenueThisMonth: 145000,
+  outstandingInvoices: 75000,
+  paidInvoices: 54000,
+  totalExpenses: 3600,
+  profit: 145000 - 3600,
+  projectsByStatus: [
+    { status: "In Progress", value: 1 },
+    { status: "Planned", value: 1 },
+  ],
+  revenueTrend: [
+    { month: "Jan", revenue: 90000, expenses: 42000 },
+    { month: "Feb", revenue: 110000, expenses: 35000 },
+    { month: "Mar", revenue: 145000, expenses: 36000 },
+  ],
+  newClientsTrend: [
+    { month: "Jan", value: 2 },
+    { month: "Feb", value: 1 },
+    { month: "Mar", value: 1 },
+  ],
+  completedProjectsTrend: [
+    { month: "Jan", value: 1 },
+    { month: "Feb", value: 1 },
+    { month: "Mar", value: 0 },
+  ],
+  topClients: [
+    { client: "Helix Health", value: 180000 },
+    { client: "Northwind Retail", value: 125000 },
+  ],
+  employeeWorkload: [
+    { employee: "Riya Sen", projects: 2, openTasks: 5 },
+    { employee: "Jonas Kim", projects: 1, openTasks: 4 },
+  ],
+};
