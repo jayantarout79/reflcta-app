@@ -22,7 +22,8 @@ export async function signInAction(
     password: formData.get("password"),
   });
   if (!parsed.success) {
-    return { message: parsed.error.errors[0]?.message ?? "Invalid input." };
+    const message = parsed.error.issues?.[0]?.message ?? "Invalid input.";
+    return { message };
   }
   if (isDemoMode) {
     redirect("/dashboard");
