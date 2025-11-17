@@ -133,7 +133,7 @@ export async function upsertExpense(values: ExpenseFormValues) {
   const dbPayload = {
     expense_date: rest.date,
     amount: rest.amount,
-    currency: rest.currency,
+    currency: rest.currency ?? "INR",
     category: rest.category,
     project_id: rest.projectId ?? null,
     client_id: rest.clientId ?? null,

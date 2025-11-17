@@ -111,7 +111,7 @@ export const expenseFormSchema = z.object({
   id: z.string().optional(),
   date: z.string(),
   amount: z.number(),
-  currency: z.string().default("USD"),
+  currency: z.string().default("USD").optional(),
   category: z.enum(["Software", "Contractor", "Travel", "Salary", "Misc"]),
   projectId: z.string().optional(),
   clientId: z.string().optional(),
