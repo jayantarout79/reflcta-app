@@ -592,14 +592,15 @@ export async function getFiles(): Promise<DocumentFile[]> {
 
 export async function getDashboard(): Promise<DashboardMetrics> {
   if (isDemoMode) return normalizeDashboard(demoDashboard);
-  const supabase = await createServerSupabaseClient();
+  const supabasePromise = createServerSupabaseClient();
+  const supabase = await supabasePromise;
   if (!supabase) return normalizeDashboard(demoDashboard);
   const { data, error } = await supabase
     .rpc("yuktra_dashboard_metrics")
     .single();
   if (error || !data) {
     logError("Unable to fetch dashboard metrics", error);
-    return buildFallbackDashboard(supabase);
+    return buildFallbackDashboard(supabasePromise);
   }
   return normalizeDashboard(data as DashboardMetrics);
 }
