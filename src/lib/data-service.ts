@@ -605,8 +605,12 @@ export async function getDashboard(): Promise<DashboardMetrics> {
 }
 
 async function buildFallbackDashboard(
-  supabase: ReturnType<typeof createServerSupabaseClient>,
+  supabasePromise: ReturnType<typeof createServerSupabaseClient>,
 ): Promise<DashboardMetrics> {
+  const supabase = await supabasePromise;
+  if (!supabase) {
+    return normalizeDashboard(demoDashboard);
+  }
   const [clientsRes, projectsRes, invoicesRes, expensesRes] = await Promise.all([
     supabase.from("clients").select("id,relationship_status"),
     supabase.from("projects").select("id,status"),
