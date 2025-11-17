@@ -32,13 +32,16 @@ export async function upsertTask(values: TaskFormValues) {
     estimated_hours: rest.estimatedHours ?? null,
   };
   const response = id
-    ? await supabase.from("tasks").update(dbPayload).eq("id", id).single()
-    : await supabase.from("tasks").insert(dbPayload).single();
+    ? await supabase.from("tasks").update(dbPayload).eq("id", id).select("project_id").single()
+    : await supabase.from("tasks").insert(dbPayload).select("project_id").single();
   if (response.error) {
     return { success: false, message: response.error.message };
   }
+  const projectId = response.data?.project_id ?? rest.projectId;
   revalidatePath("/tasks");
-  revalidatePath(`/projects/${response.data?.project_id ?? rest.projectId}`);
+  if (projectId) {
+    revalidatePath(`/projects/${projectId}`);
+  }
   return { success: true };
 }
 
