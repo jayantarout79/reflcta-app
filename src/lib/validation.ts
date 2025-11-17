@@ -133,7 +133,7 @@ export const employeeFormSchema = z.object({
     "Contractor",
     "Freelancer",
   ]),
-  status: z.enum(["Active", "On Leave", "Exited"]).default("Active"),
+  status: z.enum(["Active", "On Leave", "Exited"]).default("Active").or(z.undefined()),
   salary: z.number().optional(),
   skills: z.array(z.string()).optional(),
   notes: z.string().optional(),
