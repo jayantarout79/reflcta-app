@@ -114,8 +114,8 @@ type DocumentRow = {
 
 const mapDocumentRow = (row: DocumentRow): DocumentFile => ({
   id: row.id,
-  fileName: row.file_name ?? row.fileName,
-  storagePath: row.storage_path ?? row.storagePath,
+  fileName: row.file_name ?? row.fileName ?? "Unknown file",
+  storagePath: row.storage_path ?? row.storagePath ?? "",
   linkedType: row.linked_type ?? row.linkedType ?? "Generic",
   linkedEntityId: row.linked_entity_id ?? row.linkedEntityId,
   category: row.category,
