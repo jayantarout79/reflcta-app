@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useTransition } from "react";
+import { useEffect, useMemo, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
@@ -22,11 +22,20 @@ export function ExpenseForm({
   onSuccess?: () => void;
 }) {
   const [isPending, startTransition] = useTransition();
-  const initialDefaults = {
-    date: new Date().toISOString().slice(0, 10),
-    currency: "INR",
-    category: "Software",
-  };
+  const initialDefaults = useMemo<ExpenseFormValues>(
+    () => ({
+      id: defaultValues?.id,
+      date: new Date().toISOString().slice(0, 10),
+      amount: defaultValues?.amount ?? 0,
+      currency: "INR",
+      category: "Software",
+      projectId: undefined,
+      clientId: undefined,
+      vendor: "",
+      notes: "",
+    }),
+    [defaultValues?.amount, defaultValues?.id],
+  );
   const form = useForm<ExpenseFormValues>({
     resolver: zodResolver(expenseFormSchema),
     defaultValues: { ...initialDefaults, ...defaultValues },
@@ -34,13 +43,11 @@ export function ExpenseForm({
   useEffect(() => {
     if (defaultValues) {
       form.reset({
-        date: new Date().toISOString().slice(0, 10),
-        currency: "INR",
-        category: "Software",
+        ...initialDefaults,
         ...defaultValues,
       });
     }
-  }, [defaultValues, form]);
+  }, [defaultValues, form, initialDefaults]);
 
   const onSubmit = (values: ExpenseFormValues) => {
     startTransition(async () => {
@@ -53,7 +60,10 @@ export function ExpenseForm({
       if (values.id) {
         onSuccess?.();
       } else {
-        form.reset(initialDefaults);
+        form.reset({
+          ...initialDefaults,
+          amount: 0,
+        });
       }
     });
   };
