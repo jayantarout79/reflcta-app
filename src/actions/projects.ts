@@ -34,13 +34,16 @@ export async function upsertProject(values: ProjectFormValues) {
     tags: rest.tags ?? [],
   };
   const response = id
-    ? await supabase.from("projects").update(dbPayload).eq("id", id).single()
-    : await supabase.from("projects").insert(dbPayload).single();
+    ? await supabase.from("projects").update(dbPayload).eq("id", id).select("id").single()
+    : await supabase.from("projects").insert(dbPayload).select("id").single();
   if (response.error) {
     return { success: false, message: response.error.message };
   }
+  const projectId = response.data?.id ?? id;
   revalidatePath("/projects");
-  revalidatePath(`/projects/${response.data?.id ?? id}`);
+  if (projectId) {
+    revalidatePath(`/projects/${projectId}`);
+  }
   return { success: true };
 }
 
