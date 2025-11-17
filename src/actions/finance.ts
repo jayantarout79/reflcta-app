@@ -62,8 +62,8 @@ export async function upsertInvoice(values: InvoiceFormValues) {
     project_id: rest.projectId ?? null,
     issue_date: rest.issueDate,
     due_date: rest.dueDate,
-    currency: rest.currency,
-    status: rest.status,
+    currency: rest.currency ?? "INR",
+    status: rest.status ?? "Draft",
     notes: rest.notes ?? null,
     total,
   };

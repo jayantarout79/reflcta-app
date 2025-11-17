@@ -48,6 +48,7 @@ export function InvoiceForm({ clients, projects, invoice, onCancel, onSuccess }:
   const [isPending, startTransition] = useTransition();
   const buildDefaultValues = useCallback((): InvoiceFormValues => {
     return {
+      id: undefined,
       clientId: clients[0]?.id ?? "",
       projectId: "",
       issueDate: todayIso,

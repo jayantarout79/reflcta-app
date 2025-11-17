@@ -92,8 +92,8 @@ export const invoiceFormSchema = z.object({
   projectId: z.string().optional(),
   issueDate: z.string(),
   dueDate: z.string(),
-  currency: z.string().default("USD"),
-  status: z.enum(["Draft", "Sent", "Paid", "Overdue"]).default("Draft"),
+  currency: z.string().default("USD").optional(),
+  status: z.enum(["Draft", "Sent", "Paid", "Overdue"]).default("Draft").optional(),
   notes: z.string().optional(),
   lineItems: z
     .array(
