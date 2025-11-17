@@ -27,9 +27,14 @@ export async function POST(request: Request) {
     input: prompt,
   });
   const output = response.output?.[0];
-  const text =
-    output?.content?.[0]?.type === "output_text"
-      ? output.content[0].text
-      : "No summary generated.";
+  const outputText = response.output_text?.[0];
+  const fallbackFromContent =
+    (output?.type === "message" &&
+      "content" in output &&
+      Array.isArray(output.content) &&
+      output.content[0]?.type === "output_text" &&
+      output.content[0]?.text) ??
+    null;
+  const text = outputText ?? fallbackFromContent ?? "No summary generated.";
   return NextResponse.json({ summary: text });
 }
