@@ -1,5 +1,5 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 
 export function hasSupabaseEnv() {
   return (
@@ -12,8 +12,6 @@ export const createServerSupabaseClient = async () => {
   if (!hasSupabaseEnv()) return null;
 
   const cookieStore = await cookies();
-  const requestHeaders = headers();
-
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -36,9 +34,6 @@ export const createServerSupabaseClient = async () => {
             // no-op
           }
         },
-      },
-      headers: {
-        request: requestHeaders,
       },
     },
   );
