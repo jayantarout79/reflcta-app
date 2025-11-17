@@ -17,7 +17,7 @@ export async function uploadDocument(formData: FormData) {
   if (!validation.success) {
     return {
       success: false,
-      message: validation.error.errors[0]?.message ?? "Invalid data.",
+      message: validation.error.issues?.[0]?.message ?? "Invalid data.",
     };
   }
   const file = formData.get("file") as File | null;
