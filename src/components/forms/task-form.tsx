@@ -250,8 +250,9 @@ export function TimeEntryForm({
   const onSubmit = (values: TimeEntryFormValues) => {
     startTransition(async () => {
       const parsed = timeEntrySchema.parse(values);
-      const action = parsed.id ? updateTimeEntry : logTimeEntry;
-      const result = parsed.id ? await action(parsed.id, parsed) : await action(parsed);
+      const result = parsed.id
+        ? await updateTimeEntry(parsed.id, parsed)
+        : await logTimeEntry(parsed);
       if (!result.success) {
         toast.error(result.message ?? "Unable to log time");
         return;
