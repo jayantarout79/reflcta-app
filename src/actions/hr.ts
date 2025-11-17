@@ -27,7 +27,7 @@ export async function upsertEmployee(values: EmployeeFormValues) {
     location: rest.location ?? null,
     join_date: rest.joinDate ?? null,
     employment_type: rest.employmentType,
-    status: rest.status,
+    status: rest.status ?? "Active",
     salary: rest.salary ?? null,
     skills: rest.skills ?? [],
     notes: rest.notes ?? null,
