@@ -19,8 +19,10 @@ const statuses = ["Active", "On Leave", "Exited"] as const;
 
 export function EmployeeForm({
   defaultValues,
+  onSuccess,
 }: {
   defaultValues?: Partial<EmployeeFormValues>;
+  onSuccess?: () => void;
 }) {
   const [isPending, startTransition] = useTransition();
   const [skillsInput, setSkillsInput] = useState(
@@ -54,6 +56,8 @@ export function EmployeeForm({
       if (!values.id) {
         form.reset();
         setSkillsInput("");
+      } else {
+        onSuccess?.();
       }
     });
   };
