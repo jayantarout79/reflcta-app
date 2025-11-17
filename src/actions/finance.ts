@@ -19,7 +19,7 @@ function formatInvoiceId(sequence: number) {
 }
 
 async function getNextInvoiceId(
-  supabase: Awaited<ReturnType<typeof createServerSupabaseClient>>,
+  supabase: NonNullable<Awaited<ReturnType<typeof createServerSupabaseClient>>>,
 ) {
   const { data, error } = await supabase
     .from("invoices")
