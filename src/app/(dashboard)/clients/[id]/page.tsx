@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AISummary } from "@/components/ai/ai-summary";
-import { ClientForm } from "@/components/forms/client-form";
+import { ClientProfileEditor } from "@/components/clients/client-profile-editor";
 import {
   getClientById,
   getProjects,
@@ -59,12 +59,7 @@ export default async function ClientDetailPage({ params }: ClientPageProps) {
           View client projects →
         </Link>
       </div>
-      {canEditClients && (
-        <div>
-          <p className="text-sm font-medium text-zinc-500">Edit client profile</p>
-          <ClientForm defaultValues={formDefaults} />
-        </div>
-      )}
+      {canEditClients && <ClientProfileEditor defaultValues={formDefaults} />}
 
       <div className="grid gap-4 md:grid-cols-3">
         <div className="rounded-2xl border border-zinc-100 bg-white p-5 shadow-sm">

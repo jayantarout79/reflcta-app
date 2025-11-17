@@ -22,9 +22,24 @@ export default async function DashboardPage() {
   const activeTasks = tasks.filter((task) => task.status !== "Done").slice(0, 5);
   const recentlyWonClients = clients.slice(0, 5);
   const projectStatusItems = metrics.projectsByStatus ?? [];
-  const revenueTrend = metrics.revenueTrend ?? [];
-  const newClientsTrend = metrics.newClientsTrend ?? [];
-  const completedProjectsTrend = metrics.completedProjectsTrend ?? [];
+  const ensureAreaData = (rows?: { month: string; revenue: number; expenses: number }[]) =>
+    rows && rows.length > 0
+      ? rows
+      : Array.from({ length: 4 }, (_, index) => ({
+          month: `M${index + 1}`,
+          revenue: 0,
+          expenses: 0,
+        }));
+  const ensureBarData = (rows?: { month: string; value: number }[]) =>
+    rows && rows.length > 0
+      ? rows
+      : Array.from({ length: 4 }, (_, index) => ({
+          month: `W${index + 1}`,
+          value: 0,
+        }));
+  const revenueTrend = ensureAreaData(metrics.revenueTrend);
+  const newClientsTrend = ensureBarData(metrics.newClientsTrend);
+  const completedProjectsTrend = ensureBarData(metrics.completedProjectsTrend);
   const topClients = metrics.topClients ?? [];
   const employeeWorkload = metrics.employeeWorkload ?? [];
   const projectStatusSummary = projectStatusItems.length

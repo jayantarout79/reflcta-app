@@ -11,8 +11,10 @@ const relationshipOptions = ["Active", "Dormant", "Past", "High-Risk"] as const;
 
 export function ClientForm({
   defaultValues,
+  onSuccess,
 }: {
   defaultValues?: Partial<ClientFormValues>;
+  onSuccess?: () => void;
 }) {
   const [isPending, startTransition] = useTransition();
   const form = useForm<ClientFormValues>({
@@ -35,7 +37,11 @@ export function ClientForm({
         return;
       }
       toast.success("Client saved");
-      if (!values.id) form.reset();
+      if (!values.id) {
+        form.reset();
+      } else {
+        onSuccess?.();
+      }
     });
   };
 

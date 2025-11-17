@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ClientForm } from "@/components/forms/client-form";
-import { DeleteConfirmButton } from "@/components/delete-confirm";
 import {
   getClients,
   getInvoices,
@@ -18,7 +17,6 @@ export default async function ClientsPage() {
     getCurrentUserProfile(),
   ]);
   const canEditClients = user ? canAccess(user.role, "clients", "create") : false;
-  const canDeleteClients = user ? canAccess(user.role, "clients", "delete") : false;
 
   return (
     <div className="space-y-6">
@@ -85,14 +83,6 @@ export default async function ClientsPage() {
               <p className="mt-3 line-clamp-2 text-sm text-zinc-600">
                 {client.notes ?? "No notes captured yet."}
               </p>
-              {canDeleteClients && (
-                <div className="mt-3">
-                  <DeleteConfirmButton
-                    entityLabel={client.name}
-                    request={{ entity: "client", payload: { id: client.id } }}
-                  />
-                </div>
-              )}
             </Link>
           );
         })}
