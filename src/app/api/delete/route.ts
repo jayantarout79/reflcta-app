@@ -14,7 +14,10 @@ export async function POST(request: Request) {
     entity: string;
     payload: Record<string, unknown>;
   };
-  let result = { success: false, message: "Unknown entity" };
+  let result: { success: boolean; message?: string } = {
+    success: false,
+    message: "Unknown entity",
+  };
   try {
     switch (entity) {
       case "client":
@@ -42,5 +45,8 @@ export async function POST(request: Request) {
     console.error("Delete API error", error);
     result = { success: false, message: "Delete failed." };
   }
-  return NextResponse.json(result, { status: result.success ? 200 : 400 });
+  return NextResponse.json(
+    { success: result.success, message: result.message ?? "" },
+    { status: result.success ? 200 : 400 },
+  );
 }
