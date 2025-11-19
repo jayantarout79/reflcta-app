@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function AISummary({
   entityType,
@@ -33,27 +35,28 @@ export function AISummary({
   };
 
   return (
-    <div className="space-y-3 rounded-2xl border border-emerald-100 bg-emerald-50 p-4">
+    <div className="card space-y-3 border border-[var(--color-primary)]/10 bg-gradient-to-br from-white via-white to-[var(--color-primary-soft)]/20 p-5">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs uppercase tracking-wide text-emerald-500">AI</p>
-          <p className="text-sm font-semibold text-emerald-800">Situation summary</p>
+          <p className="text-xs uppercase tracking-[0.35em] text-[var(--color-muted)]">AI</p>
+          <p className="text-lg font-semibold text-[var(--color-foreground)]">Situation summary</p>
         </div>
-        <button
-          type="button"
-          onClick={handleClick}
-          disabled={loading}
-          className="rounded-full bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white disabled:opacity-70"
-        >
-          {loading ? "Thinking..." : "Generate"}
-        </button>
+        <Button type="button" size="sm" onClick={handleClick} disabled={loading}>
+          {loading ? (
+            "Thinking..."
+          ) : (
+            <span className="inline-flex items-center gap-1">
+              <Sparkles className="h-3.5 w-3.5" /> Generate
+            </span>
+          )}
+        </Button>
       </div>
       {summary ? (
-        <div className="prose prose-sm max-w-none text-emerald-900">
+        <div className="prose prose-sm max-w-none text-[var(--color-foreground)]">
           <pre className="whitespace-pre-wrap">{summary}</pre>
         </div>
       ) : (
-        <p className="text-sm text-emerald-800">
+        <p className="text-sm text-[var(--color-muted)]">
           Provide fast executive insight across projects or clients.
         </p>
       )}

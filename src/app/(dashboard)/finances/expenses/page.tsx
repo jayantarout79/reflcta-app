@@ -17,57 +17,84 @@ export default async function ExpensesPage() {
     getCurrentUserProfile(),
   ]);
   const total = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+  const canCreate = user ? canAccess(user.role, "expenses", "create") : false;
+  const canUpdate = user ? canAccess(user.role, "expenses", "update") : false;
+  const canDelete = user ? canAccess(user.role, "expenses", "delete") : false;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm text-zinc-500">Cost control</p>
-          <h1 className="text-2xl font-semibold text-zinc-900">Expenses</h1>
+          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[var(--color-muted)]">
+            Cost control
+          </p>
+          <h1 className="text-3xl font-semibold text-[var(--color-foreground)]">Expenses</h1>
         </div>
-        <p className="text-sm text-zinc-500">{currencyFormatter(total)} spent</p>
+        <p className="text-sm text-[var(--color-muted)]">{currencyFormatter(total)} spent</p>
       </div>
-      {user && canAccess(user.role, "expenses", "create") && (
+      {canCreate && (
         <ExpenseForm clients={clients} projects={projects} />
       )}
-      <div className="rounded-2xl border border-zinc-100 bg-white p-5 shadow-sm">
-        <h2 className="text-lg font-semibold text-zinc-900">Expense log</h2>
-        <div className="mt-4 space-y-3">
+      <div className="card p-6">
+        <h2 className="text-2xl font-semibold text-[var(--color-foreground)]">Expense log</h2>
+        <div className="mt-4 space-y-4">
           {expenses.map((expense) => (
-            <div
+            <article
               key={expense.id}
-              className="grid gap-2 rounded-2xl border border-zinc-100 bg-zinc-50 px-4 py-3 sm:grid-cols-5"
+              className="space-y-4 rounded-2xl border border-white/60 bg-[var(--color-surface-muted)]/70 p-4"
             >
-              <div>
-                <p className="text-sm font-semibold text-zinc-900">{expense.category}</p>
-                <p className="text-xs text-zinc-500">{expense.vendor ?? "Vendor"}</p>
+              <div className="grid gap-3 md:grid-cols-4">
+                <div>
+                  <p className="text-sm font-semibold text-[var(--color-foreground)]">
+                    {expense.category}
+                  </p>
+                  <p className="text-xs text-[var(--color-muted)]">{expense.vendor ?? "Vendor"}</p>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-widest text-[var(--color-muted)]">
+                    Client / Project
+                  </p>
+                  <p className="text-sm text-[var(--color-foreground)]">
+                    {expense.clientName ?? "—"} / {expense.projectName ?? "—"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-widest text-[var(--color-muted)]">
+                    Date
+                  </p>
+                  <p className="text-sm font-semibold text-[var(--color-foreground)]">
+                    {formatDate(expense.date)}
+                  </p>
+                </div>
+                <div className="flex flex-col items-end justify-between gap-2 text-right">
+                  <div>
+                    <p className="text-sm font-semibold text-[var(--color-foreground)]">
+                      {currencyFormatter(expense.amount)}
+                    </p>
+                    <p className="text-xs text-[var(--color-muted)]">
+                      {expense.currency ?? "INR"}
+                    </p>
+                  </div>
+                  {canDelete && (
+                    <DeleteConfirmButton
+                      entityLabel={expense.category}
+                      request={{ entity: "expense", payload: { id: expense.id } }}
+                    />
+                  )}
+                </div>
               </div>
-              <div>
-                <p className="text-xs text-zinc-500">Client / Project</p>
-                <p className="text-sm">
-                  {expense.clientName ?? "—"} / {expense.projectName ?? "—"}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs text-zinc-500">Date</p>
-                <p className="text-sm font-semibold">{formatDate(expense.date)}</p>
-              </div>
-              <div className="text-right">
-                <p className="text-sm font-semibold">{currencyFormatter(expense.amount)}</p>
-                <p className="text-xs text-zinc-500">{expense.currency}</p>
-              </div>
-              {user && canAccess(user.role, "expenses", "update") && (
-                <details>
-                  <summary className="cursor-pointer text-xs font-semibold text-zinc-500">
-                    Edit
+              {canUpdate && (
+                <details className="border-t border-white/60 pt-3">
+                  <summary className="flex cursor-pointer justify-end text-sm font-semibold text-[var(--color-primary)]">
+                    Edit expense
                   </summary>
-                  <div className="mt-2 rounded-2xl border border-zinc-100 bg-white/80 p-3">
+                  <div className="mt-3">
                     <ExpenseForm
                       clients={clients}
                       projects={projects}
                       defaultValues={{
                         id: expense.id,
-                        date: expense.date,
+                        date: expense.date ? expense.date.slice(0, 10) : undefined,
                         amount: expense.amount,
                         currency: expense.currency,
                         category: expense.category,
@@ -80,15 +107,7 @@ export default async function ExpensesPage() {
                   </div>
                 </details>
               )}
-              {user && canAccess(user.role, "expenses", "delete") && (
-                <div className="text-right">
-                  <DeleteConfirmButton
-                    entityLabel={expense.category}
-                    request={{ entity: "expense", payload: { id: expense.id } }}
-                  />
-                </div>
-              )}
-            </div>
+            </article>
           ))}
         </div>
       </div>

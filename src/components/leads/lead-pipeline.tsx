@@ -6,6 +6,7 @@ import type { Lead } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 import { LeadForm } from "@/components/forms/lead-form";
 import { ConvertLeadButton } from "./convert-lead-button";
+import { Button } from "@/components/ui/button";
 
 const columns = ["New", "Contacted", "Proposal Sent", "Won", "Lost"] as const;
 
@@ -29,24 +30,20 @@ export function LeadPipelineBoard({ leads, canEdit, canConvert }: LeadPipelinePr
   return (
     <div className="space-y-6">
       {canEdit && (
-        <div className="rounded-3xl border border-zinc-100 bg-white p-5 shadow-sm">
+        <div className="card p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs uppercase tracking-wide text-zinc-500">
+              <p className="text-xs uppercase tracking-[0.35em] text-[var(--color-muted)]">
                 {editingLead ? "Update lead" : "New lead"}
               </p>
-              <h2 className="text-lg font-semibold text-zinc-900">
+              <h2 className="text-2xl font-semibold text-[var(--color-foreground)]">
                 {editingLead ? editingLead.company : "Capture opportunity"}
               </h2>
             </div>
             {editingLead && (
-              <button
-                type="button"
-                onClick={() => setEditingLead(null)}
-                className="text-sm font-semibold text-zinc-500 hover:text-zinc-900"
-              >
+              <Button type="button" variant="ghost" size="sm" onClick={() => setEditingLead(null)}>
                 Clear selection
-              </button>
+              </Button>
             )}
           </div>
           <div className="mt-4">
@@ -57,13 +54,13 @@ export function LeadPipelineBoard({ leads, canEdit, canConvert }: LeadPipelinePr
           </div>
         </div>
       )}
-      <div className="rounded-3xl border border-zinc-100 bg-white/70 p-4 shadow-sm">
+      <div className="card p-4">
         <div className="grid gap-4 lg:grid-cols-5">
           {grouped.map(({ status, items }) => (
             <div key={status} className="space-y-3">
-              <div className="flex items-center justify-between rounded-2xl bg-zinc-50 px-3 py-2">
-                <p className="text-sm font-semibold text-zinc-900">{status}</p>
-                <span className="rounded-full bg-zinc-200/60 px-2 py-0.5 text-xs font-semibold text-zinc-600">
+              <div className="flex items-center justify-between rounded-2xl border border-white/60 bg-[var(--color-surface-muted)] px-3 py-2">
+                <p className="text-sm font-semibold text-[var(--color-foreground)]">{status}</p>
+                <span className="chip bg-white px-2 py-0.5 text-xs text-[var(--color-muted)]">
                   {items.length}
                 </span>
               </div>
@@ -71,29 +68,31 @@ export function LeadPipelineBoard({ leads, canEdit, canConvert }: LeadPipelinePr
                 {items.map((lead) => (
                   <div
                     key={lead.id}
-                    className="rounded-2xl border border-zinc-100 bg-white/80 p-3 shadow-sm"
+                    className="rounded-2xl border border-white/60 bg-white/80 p-3 shadow-sm transition hover:-translate-y-0.5"
                   >
                     <div className="flex items-start justify-between">
                       <div>
-                        <p className="text-sm font-semibold text-zinc-900">{lead.company}</p>
-                        <p className="text-xs uppercase tracking-wide text-zinc-400">
+                        <p className="text-sm font-semibold text-[var(--color-foreground)]">{lead.company}</p>
+                        <p className="text-xs uppercase tracking-widest text-[var(--color-muted)]">
                           {lead.name}
                         </p>
                       </div>
                       {canEdit && (
-                        <button
+                        <Button
                           type="button"
+                          variant="ghost"
+                          size="icon"
                           onClick={() => setEditingLead(lead)}
-                          className="rounded-full bg-zinc-100 p-1 text-zinc-500 transition hover:bg-zinc-200"
+                          aria-label={`Edit ${lead.company}`}
                         >
                           <PencilLine className="h-4 w-4" />
-                        </button>
+                        </Button>
                       )}
                     </div>
-                    <p className="mt-2 text-xs text-zinc-500">
+                    <p className="mt-2 text-xs text-[var(--color-muted)]">
                       Next follow-up {formatDate(lead.nextFollowUp)}
                     </p>
-                    <p className="text-xs text-zinc-500">Source • {lead.source}</p>
+                    <p className="text-xs text-[var(--color-muted)]">Source • {lead.source}</p>
                     {(canConvert && (status === "Proposal Sent" || status === "Contacted")) && (
                       <div className="mt-3">
                         <ConvertLeadButton leadId={lead.id} />
@@ -102,7 +101,7 @@ export function LeadPipelineBoard({ leads, canEdit, canConvert }: LeadPipelinePr
                   </div>
                 ))}
                 {items.length === 0 && (
-                  <p className="rounded-xl border border-dashed border-zinc-200 px-3 py-4 text-center text-xs text-zinc-400">
+                  <p className="rounded-2xl border border-dashed border-[var(--color-border)] px-3 py-4 text-center text-xs text-[var(--color-muted)]">
                     No leads in this stage
                   </p>
                 )}

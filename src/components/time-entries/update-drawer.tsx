@@ -4,6 +4,7 @@ import { useState } from "react";
 import { formatDate } from "@/lib/utils";
 import type { Employee, TimeEntry } from "@/lib/types";
 import { TimeEntryForm } from "@/components/forms/task-form";
+import { Button } from "@/components/ui/button";
 
 export function UpdateTimeEntryDrawer({
   entries,
@@ -16,7 +17,7 @@ export function UpdateTimeEntryDrawer({
   const [expanded, setExpanded] = useState<string | null>(null);
   if (entries.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-zinc-200 px-4 py-6 text-center text-sm text-zinc-500">
+      <p className="rounded-2xl border border-dashed border-[var(--color-border)] px-4 py-6 text-center text-sm text-[var(--color-muted)]">
         No time entries for this project yet.
       </p>
     );
@@ -34,60 +35,64 @@ export function UpdateTimeEntryDrawer({
             key={entry.id}
             type="button"
             onClick={() => setEditing(entry)}
-            className="flex w-full items-center justify-between rounded-xl bg-zinc-50 px-3 py-2 text-left hover:bg-zinc-100"
+            className="flex w-full items-center justify-between rounded-2xl border border-white/50 bg-[var(--color-surface-muted)]/80 px-4 py-3 text-left transition hover:-translate-y-0.5 hover:bg-white"
           >
             <div>
-              <p className="font-medium text-zinc-800">{entry.employeeName}</p>
-              <p className="text-xs text-zinc-500">{formatDate(entry.date)}</p>
-              <div className="mt-1 flex flex-wrap gap-1 text-[10px] font-semibold uppercase text-zinc-500">
+              <p className="font-semibold text-[var(--color-foreground)]">{entry.employeeName}</p>
+              <p className="text-xs text-[var(--color-muted)]">{formatDate(entry.date)}</p>
+              <div className="mt-1 flex flex-wrap gap-1 text-[10px] font-semibold uppercase text-[var(--color-muted)]">
                 {entry.projectName && (
-                  <span className="rounded-full bg-zinc-200 px-2 py-0.5 text-zinc-700">
+                  <span className="chip bg-white px-2 py-0.5 text-[var(--color-foreground)]">
                     {entry.projectName}
                   </span>
                 )}
                 {entry.taskName && (
-                  <span className="rounded-full bg-zinc-200 px-2 py-0.5 text-zinc-700">
+                  <span className="chip bg-white px-2 py-0.5 text-[var(--color-foreground)]">
                     {entry.taskName}
                   </span>
                 )}
               </div>
               {note && (
-                <p className="mt-1 text-xs text-zinc-500">
+                <p className="mt-1 text-xs text-[var(--color-muted)]">
                   {displayNote}
                   {showMore && (
-                    <button
-                      type="button"
+                    <span
+                      role="button"
+                      tabIndex={0}
                       onClick={(event) => {
                         event.stopPropagation();
                         setExpanded(isExpanded ? null : entry.id);
                       }}
-                      className="ml-1 text-emerald-600 underline"
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          setExpanded(isExpanded ? null : entry.id);
+                        }
+                      }}
+                      className="ml-1 cursor-pointer text-[var(--color-primary)] underline"
                     >
                       {isExpanded ? "Show less" : "Read more"}
-                    </button>
+                    </span>
                   )}
                 </p>
               )}
             </div>
-            <p className="text-sm font-semibold">{entry.hours}h</p>
+            <p className="text-sm font-semibold text-[var(--color-foreground)]">{entry.hours}h</p>
           </button>
         );
       })}
       {editing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-md rounded-2xl bg-white p-4 shadow-lg">
+          <div className="w-full max-w-md rounded-3xl bg-white p-5 shadow-2xl">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-zinc-900">Edit time entry</p>
-                <p className="text-xs text-zinc-500">{editing.employeeName}</p>
+                <p className="text-sm font-semibold text-[var(--color-foreground)]">Edit time entry</p>
+                <p className="text-xs text-[var(--color-muted)]">{editing.employeeName}</p>
               </div>
-              <button
-                type="button"
-                onClick={() => setEditing(null)}
-                className="text-xs font-semibold text-zinc-500 hover:text-zinc-700"
-              >
+              <Button type="button" variant="ghost" size="sm" onClick={() => setEditing(null)}>
                 Close
-              </button>
+              </Button>
             </div>
             <div className="mt-3">
               <TimeEntryForm

@@ -2,6 +2,8 @@
 
 import { useState, useTransition } from "react";
 import toast from "react-hot-toast";
+import { Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface DeleteRequest {
   entity: string;
@@ -47,18 +49,16 @@ export function DeleteConfirmButton({ entityLabel, request }: DeleteConfirmButto
 
   if (!isConfirming) {
     return (
-      <button
-        type="button"
-        onClick={() => setIsConfirming(true)}
-        className="text-xs font-semibold text-rose-600 hover:text-rose-800"
-      >
-        Delete
-      </button>
+      <Button type="button" variant="danger" size="sm" onClick={() => setIsConfirming(true)}>
+        <span className="inline-flex items-center gap-1">
+          <Trash2 className="h-3.5 w-3.5" /> Delete
+        </span>
+      </Button>
     );
   }
 
   return (
-    <div className="space-y-2 rounded-2xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-800">
+    <div className="space-y-2 rounded-2xl border border-rose-200/80 bg-rose-50/70 p-3 text-sm text-rose-800">
       <p>Type DELETE to remove this {entityLabel} permanently.</p>
       <input
           value={input}
@@ -67,24 +67,26 @@ export function DeleteConfirmButton({ entityLabel, request }: DeleteConfirmButto
           className="w-full rounded-lg border border-rose-200 bg-white px-3 py-2 text-sm uppercase"
       />
       <div className="flex justify-end gap-2">
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="sm"
           onClick={() => {
             setIsConfirming(false);
             setInput("");
           }}
-          className="rounded-full border border-rose-200 px-3 py-1 text-xs font-semibold text-rose-600 hover:bg-rose-100"
         >
           Cancel
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
+          variant="danger"
+          size="sm"
           onClick={handleDelete}
           disabled={input !== "DELETE" || isPending}
-          className="rounded-full bg-rose-600 px-3 py-1 text-xs font-semibold text-white disabled:opacity-60"
         >
           {isPending ? "Deleting..." : "Confirm delete"}
-        </button>
+        </Button>
       </div>
     </div>
   );

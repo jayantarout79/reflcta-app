@@ -2,13 +2,16 @@
 
 import { useTransition } from "react";
 import toast from "react-hot-toast";
+import { CheckCircle2 } from "lucide-react";
 import { convertLeadToClient } from "@/actions/leads";
+import { Button } from "@/components/ui/button";
 
 export function ConvertLeadButton({ leadId }: { leadId: string }) {
   const [isPending, startTransition] = useTransition();
   return (
-    <button
+    <Button
       type="button"
+      size="sm"
       onClick={() =>
         startTransition(async () => {
           const result = await convertLeadToClient(leadId);
@@ -20,9 +23,14 @@ export function ConvertLeadButton({ leadId }: { leadId: string }) {
         })
       }
       disabled={isPending}
-      className="rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold text-white disabled:opacity-70"
     >
-      {isPending ? "Converting..." : "Mark won"}
-    </button>
+      {isPending ? (
+        "Converting..."
+      ) : (
+        <span className="inline-flex items-center gap-1">
+          <CheckCircle2 className="h-3.5 w-3.5" /> Mark won
+        </span>
+      )}
+    </Button>
   );
 }

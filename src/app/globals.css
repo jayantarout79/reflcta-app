@@ -1,22 +1,142 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  --color-page: #edf1f7;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f6f8fc;
+  --color-foreground: #0f172a;
+  --color-muted: #5c637a;
+  --color-border: #e3e8f4;
+  --color-border-strong: #c7d3ea;
+  --color-primary: #2563eb;
+  --color-primary-strong: #1d4ed8;
+  --color-primary-soft: rgba(37, 99, 235, 0.16);
+  --color-accent: #7c3aed;
+  --color-accent-soft: rgba(124, 58, 237, 0.12);
+  --color-positive: #0f9d7d;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --shadow-card: 0 24px 65px rgba(12, 24, 60, 0.14);
+  --radius-card: 1.5rem;
+  --radius-pill: 999px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--color-page);
+  --color-foreground: var(--color-foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  min-height: 100vh;
+  background-image: radial-gradient(circle at 10% 20%, rgba(124, 58, 237, 0.06), transparent 35%),
+    radial-gradient(circle at 80% 0%, rgba(37, 99, 235, 0.08), transparent 40%),
+    linear-gradient(180deg, #f9fbff 0%, var(--color-page) 100%);
+  color: var(--color-foreground);
   font-family: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", sans-serif;
+  line-height: 1.55;
+  letter-spacing: -0.005em;
+}
+
+main {
+  color: var(--color-foreground);
+}
+
+::selection {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--color-foreground);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+p,
+li,
+span {
+  color: var(--color-foreground);
+}
+
+label {
+  display: inline-flex;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  color: var(--color-muted);
+}
+
+form input,
+form select,
+form textarea {
+  width: 100%;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--color-border) 80%, transparent);
+  background: var(--color-surface);
+  padding: 0.65rem 0.9rem;
+  font-size: 0.95rem;
+  color: var(--color-foreground);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease,
+    transform 0.15s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+form select {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--color-muted) 50%),
+    linear-gradient(135deg, var(--color-muted) 50%, transparent 50%),
+    radial-gradient(circle at top right, transparent 50%, rgba(0, 0, 0, 0) 51%);
+  background-position: calc(100% - 16px) calc(50% - 1px), calc(100% - 10px) calc(50% - 1px),
+    calc(100% - 0.5rem) 0.5rem;
+  background-size: 6px 6px, 6px 6px, 0 0;
+  background-repeat: no-repeat;
+}
+
+form textarea {
+  min-height: 120px;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+  outline: none;
+  background: #fff;
+}
+
+.card {
+  border-radius: var(--radius-card);
+  border: 1px solid color-mix(in srgb, var(--color-border) 80%, transparent);
+  background: var(--color-surface);
+  box-shadow: 0 15px 40px rgba(12, 24, 63, 0.08);
+  transition: border-color 0.2s ease, box-shadow 0.25s ease, transform 0.25s ease,
+    background 0.25s ease;
+}
+
+.card[data-hover="true"]:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card);
+}
+
+.chip {
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: none;
+}
+
+.surface-muted {
+  background: var(--color-surface-muted);
+  border: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
+  border-radius: 1.25rem;
 }
 
 ::-webkit-scrollbar {
@@ -24,6 +144,16 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(15, 23, 42, 0.2);
+  background: rgba(37, 99, 235, 0.4);
   border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

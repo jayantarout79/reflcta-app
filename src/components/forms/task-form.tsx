@@ -13,6 +13,7 @@ import {
 } from "@/actions/tasks";
 import { taskFormSchema, timeEntrySchema } from "@/lib/validation";
 import type { Employee, Project } from "@/lib/types";
+import { Button } from "@/components/ui/button";
 
 const statuses = ["To Do", "In Progress", "Blocked", "Done"] as const;
 const priorities = ["Low", "Medium", "High"] as const;
@@ -66,7 +67,7 @@ export function TaskForm({
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}
-      className="space-y-3 rounded-2xl border border-zinc-100 bg-white p-4 shadow-sm"
+      className="card space-y-5 p-6"
     >
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
@@ -161,13 +162,9 @@ export function TaskForm({
         </div>
       </div>
       <div className="flex justify-end">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-70"
-        >
+        <Button type="submit" disabled={isPending}>
           {isPending ? "Saving..." : "Save task"}
-        </button>
+        </Button>
       </div>
     </form>
   );
@@ -320,13 +317,9 @@ export function TimeEntryForm({
           />
         </div>
       </div>
-      <button
-        type="submit"
-        disabled={isPending}
-        className="w-full rounded-full bg-zinc-900 px-4 py-1.5 text-xs font-semibold text-white disabled:opacity-70"
-      >
+      <Button type="submit" size="sm" fullWidth disabled={isPending}>
         {isPending ? "Logging..." : "Log time"}
-      </button>
+      </Button>
     </form>
   );
 }

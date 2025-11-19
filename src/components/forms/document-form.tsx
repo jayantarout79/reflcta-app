@@ -3,6 +3,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { uploadDocument } from "@/actions/files";
+import { Button } from "@/components/ui/button";
 
 const categories = [
   "Contract",
@@ -52,7 +53,7 @@ export function DocumentUploadForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3 rounded-2xl border border-zinc-100 bg-white p-4">
+    <form onSubmit={handleSubmit} className="card space-y-5 p-6">
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
           <label className="text-sm font-medium text-zinc-600">Linked type</label>
@@ -89,13 +90,9 @@ export function DocumentUploadForm({
         />
       </div>
       <div className="flex justify-end">
-        <button
-          type="submit"
-          disabled={loading}
-          className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-70"
-        >
+        <Button type="submit" disabled={loading}>
           {loading ? "Uploading..." : "Upload file"}
-        </button>
+        </Button>
       </div>
     </form>
   );

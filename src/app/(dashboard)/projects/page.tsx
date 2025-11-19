@@ -22,13 +22,15 @@ export default async function ProjectsPage() {
   const canDeleteProject = user ? canAccess(user.role, "projects", "delete") : false;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm text-zinc-500">Delivery tracker</p>
-          <h1 className="text-2xl font-semibold text-zinc-900">Projects</h1>
+          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[var(--color-muted)]">
+            Delivery tracker
+          </p>
+          <h1 className="text-3xl font-semibold text-[var(--color-foreground)]">Projects</h1>
         </div>
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-[var(--color-muted)]">
           {projects.filter((p) => p.status === "In Progress").length} active engagements
         </p>
       </div>
@@ -39,52 +41,55 @@ export default async function ProjectsPage() {
         {projects.map((project) => (
           <div
             key={project.id}
-            className="rounded-2xl border border-zinc-100 bg-white p-5 shadow-sm transition hover:shadow-md"
+            className="card p-5"
+            data-hover="true"
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs uppercase tracking-wide text-zinc-400">{project.category}</p>
-                <h2 className="text-lg font-semibold text-zinc-900">{project.name}</h2>
-                <p className="text-sm text-zinc-500">{project.ownerName ?? "Owner TBD"}</p>
+                <p className="text-xs uppercase tracking-widest text-[var(--color-muted)]">
+                  {project.category}
+                </p>
+                <h2 className="text-xl font-semibold text-[var(--color-foreground)]">{project.name}</h2>
+                <p className="text-sm text-[var(--color-muted)]">{project.ownerName ?? "Owner TBD"}</p>
               </div>
               <span
-                className={`rounded-full px-3 py-1 text-xs font-semibold ${STATUS_COLORS[project.status] ?? "bg-zinc-100 text-zinc-600"}`}
+                className={`chip px-3 py-1 ${STATUS_COLORS[project.status] ?? "bg-zinc-100 text-zinc-600"}`}
               >
                 {project.status}
               </span>
             </div>
             <div className="mt-4 grid gap-3 text-sm sm:grid-cols-3">
               <div>
-                <p className="text-xs text-zinc-500">Client</p>
-                <p className="font-semibold">{project.clientName ?? "TBD"}</p>
+                <p className="text-xs uppercase tracking-widest text-[var(--color-muted)]">Client</p>
+                <p className="font-semibold text-[var(--color-foreground)]">{project.clientName ?? "TBD"}</p>
               </div>
               <div>
-                <p className="text-xs text-zinc-500">Budget</p>
-                <p className="font-semibold">
+                <p className="text-xs uppercase tracking-widest text-[var(--color-muted)]">Budget</p>
+                <p className="font-semibold text-[var(--color-foreground)]">
                   {project.budget ? currencyFormatter(project.budget) : "—"}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-zinc-500">Target</p>
-                <p className="font-semibold">{formatDate(project.targetEndDate)}</p>
+                <p className="text-xs uppercase tracking-widest text-[var(--color-muted)]">Target</p>
+                <p className="font-semibold text-[var(--color-foreground)]">{formatDate(project.targetEndDate)}</p>
               </div>
             </div>
-            <p className="mt-3 line-clamp-2 text-sm text-zinc-600">
+            <p className="mt-3 line-clamp-2 text-sm text-[var(--color-muted)]">
               {project.description ?? "No description provided."}
             </p>
             <div className="mt-4 flex items-center justify-between border-t border-zinc-100 pt-3">
               <Link
                 href={`/projects/${project.id}`}
-                className="text-sm font-semibold text-emerald-600 hover:underline"
+                className="inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-primary)]"
               >
-                View details
+                View details ↗
               </Link>
               {canEditProject && (
                 <details className="w-full">
-                  <summary className="cursor-pointer text-sm font-semibold text-zinc-600">
+                  <summary className="cursor-pointer text-sm font-semibold text-[var(--color-muted)]">
                     Edit project
                   </summary>
-                  <div className="mt-3 rounded-2xl border border-zinc-100 bg-zinc-50 p-3">
+                  <div className="mt-3 rounded-2xl border border-white/60 bg-[var(--color-surface-muted)]/80 p-3">
                     <ProjectForm
                       clients={clients}
                       employees={employees}

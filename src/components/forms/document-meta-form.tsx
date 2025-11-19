@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { documentFormSchema } from "@/lib/validation";
 import { updateDocumentMeta } from "@/actions/files";
 import { z } from "zod";
+import { Button } from "@/components/ui/button";
 
 const documentMetaSchema = documentFormSchema.extend({
   id: z.string(),
@@ -87,13 +88,9 @@ export function DocumentMetaForm({
         />
       </div>
       <div className="flex justify-end gap-2">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-full bg-emerald-600 px-4 py-1.5 text-xs font-semibold text-white"
-        >
+        <Button type="submit" size="sm" disabled={isPending}>
           {isPending ? "Saving..." : "Save metadata"}
-        </button>
+        </Button>
       </div>
     </form>
   );

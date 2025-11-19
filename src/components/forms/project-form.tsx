@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { upsertProject, type ProjectFormValues } from "@/actions/projects";
 import { projectFormSchema } from "@/lib/validation";
 import type { Client, Employee } from "@/lib/types";
+import { Button } from "@/components/ui/button";
 
 const statuses = ["Planned", "In Progress", "On Hold", "Completed", "Cancelled"] as const;
 const priorities = ["Low", "Medium", "High"] as const;
@@ -49,7 +50,7 @@ export function ProjectForm({
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}
-      className="space-y-3 rounded-2xl border border-zinc-100 bg-white p-4 shadow-sm"
+      className="card space-y-5 p-6"
     >
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
@@ -157,13 +158,9 @@ export function ProjectForm({
         />
       </div>
       <div className="flex justify-end">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-70"
-        >
+        <Button type="submit" disabled={isPending}>
           {isPending ? "Saving..." : "Save project"}
-        </button>
+        </Button>
       </div>
     </form>
   );

@@ -1,7 +1,9 @@
 import { signOutAction } from "@/actions/auth";
-import type { UserProfile } from "@/lib/types";
+import type { Role, UserProfile } from "@/lib/types";
+import { Button } from "@/components/ui/button";
+import { MobileNav } from "./mobile-nav";
 
-export function Topbar({ user }: { user?: UserProfile | null }) {
+export function Topbar({ user, role }: { user?: UserProfile | null; role: Role }) {
   const displayName = user?.name?.trim() || "YuktraAI User";
   const initials =
     displayName
@@ -11,32 +13,34 @@ export function Topbar({ user }: { user?: UserProfile | null }) {
       .slice(0, 2)
       .toUpperCase() || "YA";
   return (
-    <header className="flex items-center justify-between border-b border-zinc-200 bg-white/80 px-4 py-3 backdrop-blur">
-      <div>
-        <p className="text-sm text-zinc-500">Welcome back</p>
-        <p className="text-lg font-semibold text-zinc-900">{displayName}</p>
+    <header className="flex flex-col gap-4 border-b border-white/60 bg-white/70 px-4 py-4 backdrop-blur-lg lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[var(--color-muted)]">
+            Workspace
+          </p>
+          <p className="text-xl font-semibold text-[var(--color-foreground)]">{displayName}</p>
+        </div>
+        <MobileNav role={role} />
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex flex-1 items-center justify-end gap-4">
         <div className="text-right">
-          <p className="text-sm font-medium capitalize text-zinc-700">
+          <p className="text-sm font-semibold capitalize text-[var(--color-foreground)]">
             {user?.role ?? "viewer"}
           </p>
-          <p className="text-xs text-zinc-500">{user?.email ?? "—"}</p>
+          <p className="text-xs text-[var(--color-muted)]">{user?.email ?? "—"}</p>
         </div>
-        <div className="h-10 w-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-semibold">
+        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--color-accent-soft)] text-[var(--color-accent)] font-semibold">
           {initials}
         </div>
         {user ? (
           <form action={signOutAction}>
-            <button
-              type="submit"
-              className="rounded-full border border-zinc-200 px-4 py-1.5 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100"
-            >
+            <Button variant="secondary" size="sm" type="submit">
               Sign out
-            </button>
+            </Button>
           </form>
         ) : (
-          <span className="text-xs text-zinc-400">No active session</span>
+          <span className="text-xs text-[var(--color-muted)]">No active session</span>
         )}
       </div>
     </header>

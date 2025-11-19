@@ -5,6 +5,7 @@ import { EmployeeForm } from "@/components/forms/employee-form";
 import type { Employee } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 import { DeleteConfirmButton } from "@/components/delete-confirm";
+import { Button } from "@/components/ui/button";
 
 interface EmployeeCardListProps {
   employees: Employee[];
@@ -26,17 +27,15 @@ export function EmployeeCardList({
         const isEditing = editingId === employee.id;
         if (isEditing) {
           return (
-            <div key={employee.id} className="rounded-3xl border border-zinc-100 bg-white p-5">
+            <div key={employee.id} className="card p-6">
                 <div className="mb-3 flex items-center justify-between">
-                  <h3 className="text-sm font-semibold text-zinc-900">Edit {employee.name}</h3>
+                  <h3 className="text-sm font-semibold text-[var(--color-foreground)]">
+                    Edit {employee.name}
+                  </h3>
                   <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setEditingId(null)}
-                      className="text-xs font-semibold text-zinc-500 hover:text-zinc-900"
-                    >
+                    <Button type="button" variant="ghost" size="sm" onClick={() => setEditingId(null)}>
                       Cancel
-                    </button>
+                    </Button>
                     {canDelete && (
                       <DeleteConfirmButton
                         entityLabel={employee.name}
@@ -66,35 +65,28 @@ export function EmployeeCardList({
           );
         }
         return (
-          <article
-            key={employee.id}
-            className="space-y-4 rounded-3xl border border-zinc-100 bg-white p-5 shadow-sm"
-          >
+          <article key={employee.id} className="card space-y-4 p-6" data-hover="true">
             <div className="flex items-center justify-between">
               <div>
-                <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700">
+                <span className="chip bg-emerald-50 px-3 py-1 text-emerald-700">
                   {employee.status}
                 </span>
-                <p className="mt-2 text-lg font-semibold text-zinc-900">{employee.name}</p>
-                <p className="text-xs text-zinc-500">{employee.jobTitle ?? "Role TBD"}</p>
+                <p className="mt-2 text-xl font-semibold text-[var(--color-foreground)]">{employee.name}</p>
+                <p className="text-xs text-[var(--color-muted)]">{employee.jobTitle ?? "Role TBD"}</p>
               </div>
-        {canEdit && (
-          <button
-            type="button"
-            onClick={() => setEditingId(employee.id)}
-            className="rounded-full border border-zinc-200 px-3 py-1 text-xs font-semibold text-zinc-600 hover:bg-zinc-100"
-          >
-            Edit
-          </button>
-        )}
-        {canDelete && (
-          <DeleteConfirmButton
-            entityLabel={employee.name}
-            request={{ entity: "employee", payload: { id: employee.id } }}
-          />
-        )}
-      </div>
-            <div className="grid gap-2 rounded-2xl bg-zinc-50 p-3 text-sm text-zinc-600">
+              {canEdit && (
+                <Button type="button" variant="secondary" size="sm" onClick={() => setEditingId(employee.id)}>
+                  Edit
+                </Button>
+              )}
+              {canDelete && (
+                <DeleteConfirmButton
+                  entityLabel={employee.name}
+                  request={{ entity: "employee", payload: { id: employee.id } }}
+                />
+              )}
+            </div>
+            <div className="grid gap-2 rounded-2xl border border-white/60 bg-[var(--color-surface-muted)]/80 p-3 text-sm text-[var(--color-muted)]">
               <p>
                 Employment <span className="font-semibold">{employee.employmentType}</span>
               </p>
@@ -106,20 +98,20 @@ export function EmployeeCardList({
               </p>
               <p>
                 Email{" "}
-                <a className="font-semibold text-emerald-600" href={`mailto:${employee.email}`}>
+                <a className="font-semibold text-[var(--color-primary)]" href={`mailto:${employee.email}`}>
                   {employee.email}
                 </a>
               </p>
               {canViewSalary && employee.salary && (
                 <p>
-            Salary{" "}
-            <span className="font-semibold text-emerald-600">
-              ₹{employee.salary.toLocaleString("en-IN")}
-            </span>
+                  Salary{" "}
+                  <span className="font-semibold text-[var(--color-primary)]">
+                    ₹{employee.salary.toLocaleString("en-IN")}
+                  </span>
                 </p>
               )}
             </div>
-            <div className="text-xs text-zinc-500">
+            <div className="text-xs text-[var(--color-muted)]">
               Joined {formatDate(employee.joinDate)} • Skills:{" "}
               {(employee.skills ?? []).filter(Boolean).join(", ") || "n/a"}
             </div>

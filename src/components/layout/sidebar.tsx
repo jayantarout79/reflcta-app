@@ -18,7 +18,7 @@ import { canAccess, type Resource } from "@/lib/permissions";
 import type { Role } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
-const navSections: {
+export const NAV_SECTIONS: {
   label: string;
   items: { label: string; href: string; icon: LucideIcon; resource: Resource }[];
 }[] = [
@@ -67,23 +67,25 @@ const navSections: {
 export function Sidebar({ role }: { role: Role }) {
   const pathname = usePathname();
   return (
-    <aside className="hidden w-64 flex-none border-r border-zinc-200 bg-white/80 p-4 lg:block">
-      <div className="flex items-center gap-2 px-2 py-6">
-        <div className="h-10 w-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-semibold">
+    <aside className="hidden w-72 flex-none border-r border-white/30 bg-white/80 p-6 shadow-[inset_-1px_0_0_rgba(255,255,255,0.6)] backdrop-blur lg:block">
+      <div className="flex items-center gap-3 rounded-2xl bg-gradient-to-r from-[var(--color-primary)]/10 to-[var(--color-accent)]/10 px-4 py-5">
+        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-[var(--color-primary)] font-semibold shadow">
           YA
         </div>
         <div>
-          <p className="font-semibold text-zinc-900">YuktraAI CRM</p>
-          <p className="text-xs text-zinc-500">Internal ops</p>
+          <p className="text-sm font-semibold text-[var(--color-foreground)]">
+            YuktraAI CRM
+          </p>
+          <p className="text-xs text-[var(--color-muted)]">Intelligence studio</p>
         </div>
       </div>
-      <nav className="space-y-6">
-        {navSections.map((section) => (
+      <nav className="mt-8 space-y-7">
+        {NAV_SECTIONS.map((section) => (
           <div key={section.label}>
-            <p className="px-2 text-xs font-medium uppercase tracking-wide text-zinc-500">
+            <p className="px-3 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-muted)]">
               {section.label}
             </p>
-            <div className="mt-2 space-y-1">
+            <div className="mt-3 space-y-1.5">
               {section.items
                 .filter((item) => canAccess(role, item.resource))
                 .map((item) => {
@@ -93,14 +95,23 @@ export function Sidebar({ role }: { role: Role }) {
                       key={item.href}
                       href={item.href}
                       className={cn(
-                        "flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-medium transition",
+                        "group flex items-center gap-3 rounded-2xl px-3 py-2 text-sm font-semibold transition-all",
                         isActive
-                          ? "bg-emerald-50 text-emerald-700"
-                          : "text-zinc-600 hover:bg-zinc-100",
+                          ? "bg-[var(--color-primary)]/90 text-white shadow-[0_15px_30px_rgba(37,99,235,0.25)]"
+                          : "text-[var(--color-muted)] hover:bg-white/90 hover:text-[var(--color-foreground)]",
                       )}
                     >
-                      <item.icon className="h-4 w-4" />
-                      {item.label}
+                      <span
+                        className={cn(
+                          "flex h-9 w-9 items-center justify-center rounded-2xl border text-[var(--color-muted)] transition",
+                          isActive
+                            ? "border-white/30 bg-white/20 text-white"
+                            : "border-transparent bg-[var(--color-surface-muted)] group-hover:border-white/60",
+                        )}
+                      >
+                        <item.icon className="h-4 w-4" />
+                      </span>
+                      <span>{item.label}</span>
                     </Link>
                   );
                 })}

@@ -7,8 +7,14 @@ import toast from "react-hot-toast";
 import { upsertExpense, type ExpenseFormValues } from "@/actions/finance";
 import { expenseFormSchema } from "@/lib/validation";
 import type { Client, Project } from "@/lib/types";
+import { Button } from "@/components/ui/button";
 
 const categories = ["Software", "Contractor", "Travel", "Salary", "Misc"] as const;
+
+const normalizeDateInput = (value?: string) => {
+  if (!value) return new Date().toISOString().slice(0, 10);
+  return value.slice(0, 10);
+};
 
 export function ExpenseForm({
   clients,
@@ -22,47 +28,51 @@ export function ExpenseForm({
   onSuccess?: () => void;
 }) {
   const [isPending, startTransition] = useTransition();
-  const initialDefaults = useMemo<ExpenseFormValues>(
+  const normalizedDefaults = useMemo<ExpenseFormValues>(
     () => ({
       id: defaultValues?.id,
-      date: new Date().toISOString().slice(0, 10),
+      date: normalizeDateInput(defaultValues?.date),
       amount: defaultValues?.amount ?? 0,
-      currency: "INR",
-      category: "Software",
-      projectId: undefined,
-      clientId: undefined,
-      vendor: "",
-      notes: "",
+      currency: defaultValues?.currency ?? "INR",
+      category: defaultValues?.category ?? "Software",
+      projectId: defaultValues?.projectId ?? "",
+      clientId: defaultValues?.clientId ?? "",
+      vendor: defaultValues?.vendor ?? "",
+      notes: defaultValues?.notes ?? "",
     }),
-    [defaultValues?.amount, defaultValues?.id],
+    [defaultValues],
   );
   const form = useForm<ExpenseFormValues>({
     resolver: zodResolver(expenseFormSchema),
-    defaultValues: { ...initialDefaults, ...defaultValues },
+    defaultValues: normalizedDefaults,
   });
   useEffect(() => {
-    if (defaultValues) {
-      form.reset({
-        ...initialDefaults,
-        ...defaultValues,
-      });
-    }
-  }, [defaultValues, form, initialDefaults]);
+    form.reset(normalizedDefaults);
+  }, [form, normalizedDefaults]);
 
   const onSubmit = (values: ExpenseFormValues) => {
+    const payload: ExpenseFormValues = {
+      ...values,
+      date: normalizeDateInput(values.date),
+      clientId: values.clientId || undefined,
+      projectId: values.projectId || undefined,
+    };
     startTransition(async () => {
-      const result = await upsertExpense(values);
+      const result = await upsertExpense(payload);
       if (!result.success) {
         toast.error(result.message ?? "Unable to save expense");
         return;
       }
       toast.success("Expense saved");
-      if (values.id) {
+      if (payload.id) {
         onSuccess?.();
       } else {
         form.reset({
-          ...initialDefaults,
+          ...normalizedDefaults,
+          date: normalizeDateInput(),
           amount: 0,
+          clientId: "",
+          projectId: "",
         });
       }
     });
@@ -71,7 +81,7 @@ export function ExpenseForm({
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}
-      className="space-y-3 rounded-2xl border border-zinc-100 bg-white p-4 shadow-sm"
+      className="card space-y-5 p-6"
     >
       <div className="grid gap-3 sm:grid-cols-3">
         <div>
@@ -156,13 +166,9 @@ export function ExpenseForm({
         />
       </div>
       <div className="flex justify-end">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-70"
-        >
+        <Button type="submit" disabled={isPending}>
           {isPending ? "Saving..." : "Save expense"}
-        </button>
+        </Button>
       </div>
     </form>
   );

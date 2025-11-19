@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { upsertLead, type LeadFormValues } from "@/actions/leads";
 import { leadFormSchema } from "@/lib/validation";
+import { Button } from "@/components/ui/button";
 
 const sources = ["LinkedIn", "Email", "Referral", "Website", "Other"] as const;
 const statuses = ["New", "Contacted", "Proposal Sent", "Won", "Lost"] as const;
@@ -59,7 +60,7 @@ export function LeadForm({
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}
-      className="space-y-3 rounded-2xl border border-zinc-100 bg-white p-4 shadow-sm"
+      className="card space-y-5 p-6"
     >
       <input type="hidden" {...form.register("id")} />
       <div className="grid gap-3 sm:grid-cols-2">
@@ -144,24 +145,20 @@ export function LeadForm({
       </div>
       <div className="flex justify-end gap-2">
         {isEditing && (
-          <button
+          <Button
             type="button"
+            variant="ghost"
             onClick={() => {
               form.reset(initialValues);
               onSuccess?.();
             }}
-            className="rounded-full border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-600 hover:bg-zinc-100"
           >
             Cancel
-          </button>
+          </Button>
         )}
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm disabled:cursor-not-allowed disabled:opacity-70"
-        >
+        <Button type="submit" disabled={isPending}>
           {isPending ? "Saving..." : isEditing ? "Update lead" : "Save lead"}
-        </button>
+        </Button>
       </div>
     </form>
   );

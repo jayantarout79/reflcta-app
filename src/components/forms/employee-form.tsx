@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { upsertEmployee, type EmployeeFormValues } from "@/actions/hr";
 import { employeeFormSchema } from "@/lib/validation";
+import { Button } from "@/components/ui/button";
 
 const employmentTypes = [
   "Full-time",
@@ -65,7 +66,7 @@ export function EmployeeForm({
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}
-      className="space-y-3 rounded-2xl border border-zinc-100 bg-white p-4 shadow-sm"
+      className="card space-y-5 p-6"
     >
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
@@ -167,13 +168,9 @@ export function EmployeeForm({
         />
       </div>
       <div className="flex justify-end">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-70"
-        >
+        <Button type="submit" disabled={isPending}>
           {isPending ? "Saving..." : "Save employee"}
-        </button>
+        </Button>
       </div>
     </form>
   );

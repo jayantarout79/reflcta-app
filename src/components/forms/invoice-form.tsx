@@ -8,6 +8,7 @@ import { upsertInvoice, type InvoiceFormValues } from "@/actions/finance";
 import { invoiceFormSchema } from "@/lib/validation";
 import type { Client, Invoice, Project } from "@/lib/types";
 import { currencyFormatter } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const todayIso = new Date().toISOString().slice(0, 10);
 const defaultDueDate = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
@@ -124,25 +125,21 @@ export function InvoiceForm({ clients, projects, invoice, onCancel, onSuccess }:
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}
-      className="space-y-3 rounded-2xl border border-zinc-100 bg-white p-4 shadow-sm"
+      className="card space-y-5 p-6"
     >
-      <div className="flex flex-col gap-2 border-b border-zinc-100 pb-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-2 border-b border-white/60 pb-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[var(--color-muted)]">
             {isEditing ? "Edit invoice" : "Create invoice"}
           </p>
-          <p className="text-lg font-semibold text-zinc-900">
+          <p className="text-lg font-semibold text-[var(--color-foreground)]">
             {isEditing ? invoice?.id : "New billing record"}
           </p>
         </div>
         {isEditing && (
-          <button
-            type="button"
-            onClick={handleCancel}
-            className="rounded-full border border-zinc-200 px-3 py-1 text-xs font-semibold text-zinc-600"
-          >
+          <Button type="button" variant="ghost" size="sm" onClick={handleCancel}>
             Cancel edit
-          </button>
+          </Button>
         )}
       </div>
       <div className="grid gap-3 sm:grid-cols-3">
@@ -223,8 +220,8 @@ export function InvoiceForm({ clients, projects, invoice, onCancel, onSuccess }:
           {items.fields.map((field, index) => (
             <div
               key={field.id}
-              className="grid gap-2 rounded-xl border border-zinc-100 p-3 sm:grid-cols-6"
-            >
+            className="grid gap-2 rounded-2xl border border-white/60 bg-[var(--color-surface-muted)]/70 p-3 shadow-sm sm:grid-cols-6"
+          >
               <div className="sm:col-span-3">
                 <input
                   placeholder="Description"
@@ -256,63 +253,47 @@ export function InvoiceForm({ clients, projects, invoice, onCancel, onSuccess }:
                 })}
                 className="rounded-lg border border-zinc-200 px-3 py-2 text-sm"
               />
-              <button
-                type="button"
-                onClick={() => items.remove(index)}
-                className="rounded-full border border-zinc-200 px-3 py-1 text-xs text-zinc-500"
-              >
+              <Button type="button" variant="ghost" size="sm" onClick={() => items.remove(index)}>
                 Remove
-              </button>
+              </Button>
             </div>
           ))}
-          <button
-            type="button"
-            onClick={() => items.append({ ...defaultLineItem })}
-            className="text-xs font-semibold text-emerald-600"
-          >
+          <Button type="button" variant="ghost" size="sm" onClick={() => items.append({ ...defaultLineItem })}>
             + Add line item
-          </button>
+          </Button>
         </div>
       </div>
-      <div className="rounded-2xl bg-zinc-50 px-4 py-3">
+      <div className="rounded-2xl border border-white/50 bg-[var(--color-surface-muted)]/90 px-4 py-3">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-xs uppercase tracking-wide text-zinc-500">Subtotal</p>
-            <p className="text-lg font-semibold text-zinc-900">
+            <p className="text-xs uppercase tracking-widest text-[var(--color-muted)]">Subtotal</p>
+            <p className="text-lg font-semibold text-[var(--color-foreground)]">
               {currencyFormatter(totals.subtotal, currency ?? "INR")}
             </p>
           </div>
           <div>
-            <p className="text-xs uppercase tracking-wide text-zinc-500">Taxes</p>
-            <p className="text-lg font-semibold text-zinc-900">
+            <p className="text-xs uppercase tracking-widest text-[var(--color-muted)]">Taxes</p>
+            <p className="text-lg font-semibold text-[var(--color-foreground)]">
               {currencyFormatter(totals.tax, currency ?? "INR")}
             </p>
           </div>
         </div>
-        <div className="mt-3 border-t border-dashed border-zinc-200 pt-3">
-          <p className="text-xs uppercase tracking-wide text-zinc-500">Total due</p>
-          <p className="text-2xl font-semibold text-zinc-900">
+        <div className="mt-3 border-t border-dashed border-[var(--color-border)] pt-3">
+          <p className="text-xs uppercase tracking-widest text-[var(--color-muted)]">Total due</p>
+          <p className="text-2xl font-semibold text-[var(--color-foreground)]">
             {currencyFormatter(grandTotal, currency ?? "INR")}
           </p>
         </div>
       </div>
       <div className="flex justify-end gap-2">
         {isEditing && (
-          <button
-            type="button"
-            onClick={handleCancel}
-            className="rounded-full border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-600"
-          >
+          <Button type="button" variant="ghost" size="md" onClick={handleCancel}>
             Cancel
-          </button>
+          </Button>
         )}
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-70"
-        >
+        <Button type="submit" disabled={isPending}>
           {isPending ? "Saving..." : isEditing ? "Update invoice" : "Save invoice"}
-        </button>
+        </Button>
       </div>
     </form>
   );

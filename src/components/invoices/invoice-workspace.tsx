@@ -5,6 +5,8 @@ import { InvoiceForm } from "@/components/forms/invoice-form";
 import type { Client, Invoice, Project } from "@/lib/types";
 import { currencyFormatter, formatDate, STATUS_COLORS } from "@/lib/utils";
 import { downloadInvoicePdf, printInvoicePdf } from "@/lib/pdf";
+import { Button } from "@/components/ui/button";
+import { Download, PencilLine, Printer } from "lucide-react";
 
 type InvoiceWorkspaceProps = {
   invoices: Invoice[];
@@ -60,13 +62,15 @@ export function InvoiceWorkspace({
           Add a client before creating invoices.
         </p>
       )}
-      <div className="rounded-2xl border border-zinc-100 bg-white p-5 shadow-sm">
+      <div className="card p-6">
         <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-xs text-zinc-500">Recent invoices</p>
-            <h2 className="text-lg font-semibold text-zinc-900">Billing pipeline</h2>
+            <p className="text-xs uppercase tracking-[0.35em] text-[var(--color-muted)]">
+              Recent invoices
+            </p>
+            <h2 className="text-2xl font-semibold text-[var(--color-foreground)]">Billing pipeline</h2>
           </div>
-          <p className="text-xs text-zinc-500">{invoices.length} records</p>
+          <p className="text-xs text-[var(--color-muted)]">{invoices.length} records</p>
         </div>
         <div className="space-y-3">
           {invoices.map((invoice) => {
@@ -74,23 +78,31 @@ export function InvoiceWorkspace({
             return (
               <div
                 key={invoice.id}
-                className="grid gap-3 rounded-2xl border border-zinc-100 bg-zinc-50 px-4 py-3 sm:grid-cols-6 sm:items-center"
+                className="grid gap-3 rounded-2xl border border-white/60 bg-[var(--color-surface-muted)]/80 px-4 py-3 shadow-sm sm:grid-cols-6 sm:items-center"
               >
                 <div>
-                  <p className="text-sm font-semibold text-zinc-900">{invoice.id}</p>
-                  <p className="text-xs text-zinc-500">{invoice.clientName ?? "Unknown client"}</p>
+                  <p className="text-sm font-semibold text-[var(--color-foreground)]">{invoice.id}</p>
+                  <p className="text-xs text-[var(--color-muted)]">{invoice.clientName ?? "Unknown client"}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-zinc-500">Project</p>
-                  <p className="text-sm font-medium text-zinc-900">{invoice.projectName ?? "—"}</p>
+                  <p className="text-xs uppercase tracking-widest text-[var(--color-muted)]">
+                    Project
+                  </p>
+                  <p className="text-sm font-medium text-[var(--color-foreground)]">{invoice.projectName ?? "—"}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-zinc-500">Due</p>
-                  <p className="text-sm font-medium">{formatDate(invoice.dueDate)}</p>
+                  <p className="text-xs uppercase tracking-widest text-[var(--color-muted)]">
+                    Due
+                  </p>
+                  <p className="text-sm font-medium text-[var(--color-foreground)]">
+                    {formatDate(invoice.dueDate)}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-xs text-zinc-500">Subtotal / Tax</p>
-                  <p className="text-sm font-medium text-zinc-900">
+                  <p className="text-xs uppercase tracking-widest text-[var(--color-muted)]">
+                    Subtotal / Tax
+                  </p>
+                  <p className="text-sm font-medium text-[var(--color-foreground)]">
                     {currencyFormatter(subtotal, invoice.currency ?? "INR")}
                     <span className="text-xs text-zinc-500">
                       {" "}
@@ -99,41 +111,31 @@ export function InvoiceWorkspace({
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-zinc-500">Total</p>
-                  <p className="text-sm font-semibold text-zinc-900">
+                  <p className="text-xs uppercase tracking-widest text-[var(--color-muted)]">
+                    Total
+                  </p>
+                  <p className="text-sm font-semibold text-[var(--color-foreground)]">
                     {currencyFormatter(subtotal + tax, invoice.currency ?? "INR")}
                   </p>
                 </div>
                 <div className="flex flex-col gap-2">
                   <span
-                    className={`ml-auto rounded-full px-3 py-1 text-xs font-semibold ${STATUS_COLORS[invoice.status] ?? "bg-zinc-100 text-zinc-600"}`}
+                    className={`ml-auto chip px-3 py-1 ${STATUS_COLORS[invoice.status] ?? "bg-zinc-100 text-zinc-600"}`}
                   >
                     {invoice.status}
                   </span>
                   <div className="flex flex-wrap items-center justify-end gap-2">
                     {canManage && (
-                      <button
-                        type="button"
-                        onClick={() => handleEdit(invoice)}
-                        className="rounded-full border border-zinc-200 px-3 py-1 text-xs font-semibold text-zinc-700"
-                      >
-                        Edit
-                      </button>
+                      <Button type="button" variant="secondary" size="sm" onClick={() => handleEdit(invoice)}>
+                        <PencilLine className="h-3.5 w-3.5" /> Edit
+                      </Button>
                     )}
-                    <button
-                      type="button"
-                      onClick={() => printInvoicePdf(invoice)}
-                      className="rounded-full border border-zinc-200 px-3 py-1 text-xs font-semibold text-zinc-700"
-                    >
-                      Print
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => downloadInvoicePdf(invoice)}
-                      className="rounded-full border border-zinc-200 px-3 py-1 text-xs font-semibold text-zinc-700"
-                    >
-                      Download
-                    </button>
+                    <Button type="button" variant="secondary" size="sm" onClick={() => printInvoicePdf(invoice)}>
+                      <Printer className="h-3.5 w-3.5" /> Print
+                    </Button>
+                    <Button type="button" variant="secondary" size="sm" onClick={() => downloadInvoicePdf(invoice)}>
+                      <Download className="h-3.5 w-3.5" /> Download
+                    </Button>
                   </div>
                 </div>
               </div>
