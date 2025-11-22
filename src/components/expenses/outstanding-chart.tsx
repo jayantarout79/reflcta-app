@@ -16,6 +16,31 @@ export function OutstandingExpensesChart({
 }: {
   data: { name: string; amount: number }[];
 }) {
+  const formatCurrency = (
+    value:
+      | number
+      | string
+      | boolean
+      | null
+      | undefined
+      | ReadonlyArray<number | string>,
+  ) => {
+    const resolvedValue = Array.isArray(value) ? value[0] : value;
+
+    if (typeof resolvedValue === "number") {
+      return `₹${resolvedValue.toLocaleString("en-IN")}`;
+    }
+
+    if (typeof resolvedValue === "string") {
+      const numericValue = Number(resolvedValue);
+      if (Number.isFinite(numericValue)) {
+        return `₹${numericValue.toLocaleString("en-IN")}`;
+      }
+    }
+
+    return "";
+  };
+
   return (
     <div className="h-64 w-full">
       <ResponsiveContainer>
@@ -43,14 +68,14 @@ export function OutstandingExpensesChart({
               boxShadow: "0 12px 28px rgba(15,23,42,0.08)",
             }}
             labelStyle={{ fontWeight: 600, color: "#0f172a" }}
-            formatter={(value: number) => [`₹${value.toLocaleString("en-IN")}`, "Outstanding"]}
+            formatter={(value) => [formatCurrency(value), "Outstanding"]}
           />
           <Bar dataKey="amount" fill="#2563eb" radius={[6, 6, 6, 6]}>
             <LabelList
               dataKey="amount"
               position="right"
               offset={12}
-              formatter={(value: number) => `₹${value.toLocaleString("en-IN")}`}
+              formatter={(value) => formatCurrency(value)}
               className="text-sm fill-slate-700"
             />
           </Bar>
