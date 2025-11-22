@@ -138,6 +138,8 @@ export async function upsertExpense(values: ExpenseFormValues) {
     project_id: rest.projectId ?? null,
     client_id: rest.clientId ?? null,
     vendor: rest.vendor ?? null,
+    paid_by: rest.paidBy ?? null,
+    settled_up: rest.settledUp ?? null,
     notes: rest.notes ?? null,
   };
   const response = id

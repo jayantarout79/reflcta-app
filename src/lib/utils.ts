@@ -23,6 +23,18 @@ export function formatDate(value?: string | Date | null) {
   });
 }
 
+export function formatDateTime(value?: string | Date | null) {
+  if (!value) return "—";
+  const d = typeof value === "string" ? new Date(value) : value;
+  if (Number.isNaN(d.getTime())) return "—";
+  return d.toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
 export const STATUS_COLORS: Record<string, string> = {
   "In Progress": "bg-sky-50 text-sky-700",
   Completed: "bg-emerald-50 text-emerald-700",

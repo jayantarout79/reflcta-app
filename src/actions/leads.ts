@@ -30,6 +30,8 @@ export async function upsertLead(values: LeadFormValues) {
     status: rest.status,
     notes: rest.notes ?? null,
     next_follow_up: rest.nextFollowUp ? rest.nextFollowUp : null,
+    cold_email_sent_flag: rest.coldEmailSentFlag ?? null,
+    cold_email_sent_ts: rest.coldEmailSentTs ? rest.coldEmailSentTs : null,
   };
   const query = supabase.from("leads");
   const response = id

@@ -12,6 +12,8 @@ export const leadFormSchema = z.object({
   status: z.enum(["New", "Contacted", "Proposal Sent", "Won", "Lost"]),
   notes: z.string().optional(),
   nextFollowUp: z.string().optional(),
+  coldEmailSentFlag: z.boolean().nullable().optional(),
+  coldEmailSentTs: z.string().nullable().optional(),
 });
 
 export const clientFormSchema = z.object({
@@ -116,6 +118,8 @@ export const expenseFormSchema = z.object({
   projectId: z.string().optional(),
   clientId: z.string().optional(),
   vendor: z.string().optional(),
+  paidBy: z.string().optional(),
+  settledUp: z.boolean().nullable().optional(),
   notes: z.string().optional(),
 });
 

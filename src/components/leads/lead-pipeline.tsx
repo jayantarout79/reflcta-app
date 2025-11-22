@@ -1,9 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { PencilLine } from "lucide-react";
+import { MailCheck, MailQuestion, PencilLine, Timer } from "lucide-react";
 import type { Lead } from "@/lib/types";
-import { formatDate } from "@/lib/utils";
+import { formatDate, formatDateTime, cn } from "@/lib/utils";
 import { LeadForm } from "@/components/forms/lead-form";
 import { ConvertLeadButton } from "./convert-lead-button";
 import { Button } from "@/components/ui/button";
@@ -93,6 +93,37 @@ export function LeadPipelineBoard({ leads, canEdit, canConvert }: LeadPipelinePr
                       Next follow-up {formatDate(lead.nextFollowUp)}
                     </p>
                     <p className="text-xs text-[var(--color-muted)]">Source • {lead.source}</p>
+                    <div className="mt-3 flex flex-wrap items-center gap-2">
+                      <span
+                        className={cn(
+                          "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold border",
+                          lead.coldEmailSentFlag === true
+                            ? "text-emerald-700 border-emerald-200 bg-emerald-50"
+                            : lead.coldEmailSentFlag === false
+                              ? "text-rose-700 border-rose-200 bg-rose-50"
+                              : "text-slate-600 border-slate-200 bg-slate-50",
+                        )}
+                      >
+                        {lead.coldEmailSentFlag === true ? (
+                          <MailCheck className="h-3.5 w-3.5" />
+                        ) : lead.coldEmailSentFlag === false ? (
+                          <MailQuestion className="h-3.5 w-3.5" />
+                        ) : (
+                          <Timer className="h-3.5 w-3.5" />
+                        )}
+                        {lead.coldEmailSentFlag === true
+                          ? "Cold Email Sent"
+                          : lead.coldEmailSentFlag === false
+                            ? "Cold Email Not Sent"
+                            : "Cold Email Not Set"}
+                      </span>
+                      {lead.coldEmailSentTs && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[var(--color-surface-muted)] px-2.5 py-1 text-[11px] font-semibold text-[var(--color-muted)]">
+                          <Timer className="h-3.5 w-3.5" />
+                          {formatDateTime(lead.coldEmailSentTs)}
+                        </span>
+                      )}
+                    </div>
                     {(canConvert && (status === "Proposal Sent" || status === "Contacted")) && (
                       <div className="mt-3">
                         <ConvertLeadButton leadId={lead.id} />

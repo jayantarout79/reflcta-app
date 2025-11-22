@@ -17,6 +17,11 @@ export const metadata: Metadata = {
   title: "YuktraAI CRM",
   description:
     "Internal CRM and operations platform for the YuktraAI services team.",
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
 };
 
 export default function RootLayout({

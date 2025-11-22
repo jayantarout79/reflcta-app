@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { canAccess } from "@/lib/permissions";
@@ -31,8 +32,22 @@ export function MobileNav({ role }: { role: Role }) {
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={close} role="presentation" />
           <div className="relative ml-auto flex h-full w-72 max-w-[90%] flex-col bg-white p-5 shadow-2xl">
-            <div className="mb-4 flex items-center justify-between">
-              <p className="text-sm font-semibold text-[var(--color-foreground)]">Navigation</p>
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-surface-muted)]">
+                  <Image
+                    src="/logo_yuktra.png"
+                    alt="YuktraAI logo"
+                    width={32}
+                    height={32}
+                    className="h-8 w-8 object-contain"
+                  />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-[var(--color-foreground)]">YuktraAI CRM</p>
+                  <p className="text-xs text-[var(--color-muted)]">Intelligence studio</p>
+                </div>
+              </div>
               <Button type="button" variant="ghost" size="icon" onClick={close} aria-label="Close menu">
                 <X className="h-4 w-4" />
               </Button>

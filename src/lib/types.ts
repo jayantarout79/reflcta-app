@@ -23,6 +23,8 @@ export interface Lead {
   status: "New" | "Contacted" | "Proposal Sent" | "Won" | "Lost";
   notes?: string;
   nextFollowUp?: string;
+  coldEmailSentFlag?: boolean | null;
+  coldEmailSentTs?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -136,6 +138,8 @@ export interface Expense {
   clientId?: string;
   clientName?: string;
   vendor?: string;
+  paidBy?: string;
+  settledUp?: boolean | null;
   notes?: string;
   attachmentUrl?: string;
 }

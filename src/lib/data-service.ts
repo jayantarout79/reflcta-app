@@ -283,6 +283,63 @@ export async function getCurrentUserProfile(): Promise<UserProfile | null> {
   );
 }
 
+type LeadRow = {
+  id: string;
+  name: string;
+  company: string;
+  email: string;
+  phone?: string | null;
+  country?: string | null;
+  industry?: string | null;
+  source: Lead["source"];
+  status: Lead["status"];
+  notes?: string | null;
+  next_follow_up?: string | null;
+  nextFollowUp?: string | null;
+  Cold_Email_Sent_Flag?: boolean | string | null;
+  cold_email_sent_flag?: boolean | null;
+  coldEmailSentFlag?: boolean | null;
+  Cold_Email_Sent_Ts?: string | null;
+  cold_email_sent_ts?: string | null;
+  coldEmailSentTs?: string | null;
+  created_at: string;
+  createdAt?: string;
+  updated_at: string;
+  updatedAt?: string;
+};
+
+const normalizeBoolean = (value: unknown): boolean | null => {
+  if (value === null || value === undefined) return null;
+  if (typeof value === "boolean") return value;
+  if (typeof value === "string") {
+    const lower = value.trim().toLowerCase();
+    if (lower === "true") return true;
+    if (lower === "false") return false;
+  }
+  return null;
+};
+
+const mapLeadRow = (row: LeadRow): Lead => ({
+  id: row.id,
+  name: row.name,
+  company: row.company,
+  email: row.email,
+  phone: row.phone ?? undefined,
+  country: row.country ?? undefined,
+  industry: row.industry ?? undefined,
+  source: row.source,
+  status: row.status,
+  notes: row.notes ?? undefined,
+  nextFollowUp: row.next_follow_up ?? row.nextFollowUp ?? undefined,
+  coldEmailSentFlag: normalizeBoolean(
+    row.cold_email_sent_flag ?? row.coldEmailSentFlag ?? row.Cold_Email_Sent_Flag,
+  ),
+  coldEmailSentTs:
+    row.cold_email_sent_ts ?? row.coldEmailSentTs ?? row.Cold_Email_Sent_Ts ?? null,
+  createdAt: row.created_at ?? row.createdAt ?? new Date().toISOString(),
+  updatedAt: row.updated_at ?? row.updatedAt ?? new Date().toISOString(),
+});
+
 export async function getLeads(): Promise<Lead[]> {
   if (isDemoMode) return demoLeads;
   const supabase = await createServerSupabaseClient();
@@ -295,7 +352,7 @@ export async function getLeads(): Promise<Lead[]> {
     logError("Unable to fetch leads", error);
     return demoLeads;
   }
-  return data as Lead[];
+  return data.map(mapLeadRow);
 }
 
 export async function getClients(): Promise<Client[]> {
@@ -536,6 +593,8 @@ export async function getExpenses(): Promise<Expense[]> {
     clientId: row.client_id ?? undefined,
     clientName: clientLookup.get(row.client_id) ?? undefined,
     vendor: row.vendor ?? undefined,
+    paidBy: row.paid_by ?? undefined,
+    settledUp: row.settled_up ?? null,
     notes: row.notes ?? undefined,
   })) as Expense[];
 }

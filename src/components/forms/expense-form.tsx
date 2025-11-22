@@ -38,6 +38,8 @@ export function ExpenseForm({
       projectId: defaultValues?.projectId ?? "",
       clientId: defaultValues?.clientId ?? "",
       vendor: defaultValues?.vendor ?? "",
+      paidBy: defaultValues?.paidBy ?? "",
+      settledUp: defaultValues?.settledUp ?? null,
       notes: defaultValues?.notes ?? "",
     }),
     [defaultValues],
@@ -56,6 +58,8 @@ export function ExpenseForm({
       date: normalizeDateInput(values.date),
       clientId: values.clientId || undefined,
       projectId: values.projectId || undefined,
+      paidBy: values.paidBy?.trim() || undefined,
+      settledUp: values.settledUp ?? null,
     };
     startTransition(async () => {
       const result = await upsertExpense(payload);
@@ -156,6 +160,32 @@ export function ExpenseForm({
           className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm"
           placeholder="Vendor / payee"
         />
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label className="text-sm font-medium text-zinc-600">Paid by</label>
+          <input
+            {...form.register("paidBy")}
+            className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm"
+            placeholder="Person or team to reimburse"
+          />
+        </div>
+        <div>
+          <label className="text-sm font-medium text-zinc-600">Settled?</label>
+          <select
+            {...form.register("settledUp", {
+              setValueAs: (val) => {
+                if (val === "" || val === undefined) return null;
+                return val === "true";
+              },
+            })}
+            className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm"
+          >
+            <option value="">Not set</option>
+            <option value="false">Outstanding</option>
+            <option value="true">Settled</option>
+          </select>
+        </div>
       </div>
       <div>
         <label className="text-sm font-medium text-zinc-600">Notes</label>
