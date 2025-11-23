@@ -30,8 +30,10 @@ export async function upsertLead(values: LeadFormValues) {
     status: rest.status,
     notes: rest.notes ?? null,
     next_follow_up: rest.nextFollowUp ? rest.nextFollowUp : null,
-    cold_email_sent_flag: rest.coldEmailSentFlag ?? null,
-    cold_email_sent_ts: rest.coldEmailSentTs ? rest.coldEmailSentTs : null,
+    // These columns are stored with capitalized names in the existing database
+    // schema, so we write using that casing to avoid schema cache errors.
+    Cold_Email_Sent_Flag: rest.coldEmailSentFlag ?? null,
+    Cold_Email_Sent_Ts: rest.coldEmailSentTs ? rest.coldEmailSentTs : null,
   };
   const query = supabase.from("leads");
   const response = id
