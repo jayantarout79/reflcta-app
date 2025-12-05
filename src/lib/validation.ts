@@ -157,3 +157,21 @@ export const documentFormSchema = z.object({
   ]),
   uploadedBy: z.string().optional(),
 });
+
+export const studentEnrollmentSchema = z.object({
+  id: z.number(),
+  fullName: z.string().min(2),
+  email: z.string().email(),
+  phone: z.string().optional(),
+  country: z.string().optional(),
+  currentRole: z.string().optional(),
+  experienceYears: z.string().optional(),
+  motivation: z.string().optional(),
+  courseCode: z.string().min(1),
+  batchLabel: z.string().min(1),
+  enrollmentType: z.string().min(1),
+  paymentStatus: z.string().min(1),
+  leadSource: z.string().min(1),
+  isDemoOnly: z.boolean().optional(),
+  batchSchedule: z.string().optional(),
+});

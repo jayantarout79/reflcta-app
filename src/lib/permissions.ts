@@ -13,7 +13,8 @@ export type Resource =
   | "employees"
   | "files"
   | "analytics"
-  | "ai";
+  | "ai"
+  | "courses";
 
 const CRUD: CrudAction[] = ["create", "read", "update", "delete"];
 const READ: CrudAction[] = ["read"];
@@ -84,6 +85,12 @@ const ROLE_MATRIX: Record<Resource, Record<Role, CrudAction[]>> = {
     manager: CRUD,
     employee: ["create", "read"],
     viewer: [],
+  },
+  courses: {
+    admin: CRUD,
+    manager: CRUD,
+    employee: READ,
+    viewer: READ,
   },
 };
 

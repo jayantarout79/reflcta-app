@@ -7,6 +7,7 @@ import { deleteTask } from "@/actions/tasks";
 import { deleteExpense } from "@/actions/finance";
 import { deleteEmployee } from "@/actions/hr";
 import { deleteDocument } from "@/actions/files";
+import { deleteStudentEnrollment } from "@/actions/enrollments";
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -37,6 +38,9 @@ export async function POST(request: Request) {
       break;
     case "document":
       result = await deleteDocument(payload.id as string, payload.storagePath as string | undefined);
+      break;
+    case "studentEnrollment":
+      result = await deleteStudentEnrollment(payload.id as number);
       break;
       default:
         result = { success: false, message: "Unsupported delete entity." };

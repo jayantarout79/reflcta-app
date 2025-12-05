@@ -223,3 +223,22 @@ export interface ProposalDraft {
   timelineWeeks: number;
   deliverables: string[];
 }
+
+export interface StudentEnrollment {
+  id: number;
+  fullName: string;
+  email: string;
+  phone?: string;
+  country?: string;
+  currentRole?: string;
+  experienceYears?: string;
+  motivation?: string;
+  courseCode: string;
+  batchLabel: string;
+  enrollmentType: string;
+  paymentStatus: string;
+  leadSource: string;
+  isDemoOnly: boolean;
+  createdAt: string;
+  batchSchedule?: string;
+}

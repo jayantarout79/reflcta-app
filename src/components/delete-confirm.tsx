@@ -13,9 +13,10 @@ interface DeleteRequest {
 interface DeleteConfirmButtonProps {
   entityLabel: string;
   request: DeleteRequest;
+  onDeleted?: () => void;
 }
 
-export function DeleteConfirmButton({ entityLabel, request }: DeleteConfirmButtonProps) {
+export function DeleteConfirmButton({ entityLabel, request, onDeleted }: DeleteConfirmButtonProps) {
   const [isConfirming, setIsConfirming] = useState(false);
   const [input, setInput] = useState("");
   const [isPending, startTransition] = useTransition();
@@ -40,6 +41,7 @@ export function DeleteConfirmButton({ entityLabel, request }: DeleteConfirmButto
         toast.success(`${entityLabel} deleted`);
         setIsConfirming(false);
         setInput("");
+        onDeleted?.();
       } catch (error) {
         console.error(error);
         toast.error("Delete failed.");

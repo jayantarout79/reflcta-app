@@ -14,6 +14,7 @@ import {
   PiggyBank,
   UserCircle,
   Bot,
+  GraduationCap,
 } from "lucide-react";
 import { canAccess, type Resource } from "@/lib/permissions";
 import type { Role } from "@/lib/types";
@@ -61,6 +62,17 @@ export const NAV_SECTIONS: {
         resource: "employees",
       },
       { label: "AI Studio", href: "/ai/proposals", icon: Bot, resource: "ai" },
+    ],
+  },
+  {
+    label: "Yuktra Courses",
+    items: [
+      {
+        label: "Enrollments",
+        href: "/courses",
+        icon: GraduationCap,
+        resource: "courses",
+      },
     ],
   },
 ];

@@ -25,7 +25,9 @@ import {
   type Task,
   type TimeEntry,
   type UserProfile,
+  type StudentEnrollment,
 } from "./types";
+import { getServiceRoleClient } from "./supabase/service";
 
 const logError = (message: string, error?: unknown) => {
   if (process.env.NODE_ENV !== "production") {
@@ -122,6 +124,44 @@ const mapDocumentRow = (row: DocumentRow): DocumentFile => ({
   uploadedBy: row.uploaded_by ?? row.uploadedBy ?? "",
   uploadedAt: row.uploaded_at ?? row.uploadedAt ?? new Date().toISOString(),
   url: row.url ?? undefined,
+});
+
+type StudentEnrollmentRow = {
+  id: number;
+  full_name: string;
+  email: string;
+  phone?: string | null;
+  country?: string | null;
+  current_role?: string | null;
+  experience_years?: string | null;
+  motivation?: string | null;
+  course_code: string;
+  batch_label: string;
+  enrollment_type: string;
+  payment_status: string;
+  lead_source: string;
+  is_demo_only?: boolean | null;
+  created_at: string;
+  batch_schedule?: string | null;
+};
+
+const mapStudentEnrollmentRow = (row: StudentEnrollmentRow): StudentEnrollment => ({
+  id: Number(row.id),
+  fullName: row.full_name,
+  email: row.email,
+  phone: row.phone ?? undefined,
+  country: row.country ?? undefined,
+  currentRole: row.current_role ?? undefined,
+  experienceYears: row.experience_years ?? undefined,
+  motivation: row.motivation ?? undefined,
+  courseCode: row.course_code,
+  batchLabel: row.batch_label,
+  enrollmentType: row.enrollment_type,
+  paymentStatus: row.payment_status,
+  leadSource: row.lead_source,
+  isDemoOnly: Boolean(row.is_demo_only),
+  createdAt: row.created_at,
+  batchSchedule: row.batch_schedule ?? undefined,
 });
 
 type ProjectRow = {
@@ -647,6 +687,21 @@ export async function getFiles(): Promise<DocumentFile[]> {
     return demoFiles;
   }
   return data.map(mapDocumentRow);
+}
+
+export async function getStudentEnrollments(): Promise<StudentEnrollment[]> {
+  if (isDemoMode) return [];
+  const supabase = getServiceRoleClient() ?? (await createServerSupabaseClient());
+  if (!supabase) return [];
+  const { data, error } = await supabase
+    .from("student_enrollments")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error || !data) {
+    logError("Unable to fetch student enrollments", error);
+    return [];
+  }
+  return (data as StudentEnrollmentRow[]).map(mapStudentEnrollmentRow);
 }
 
 export async function getDashboard(): Promise<DashboardMetrics> {
