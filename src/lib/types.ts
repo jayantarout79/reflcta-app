@@ -144,6 +144,58 @@ export interface Expense {
   attachmentUrl?: string;
 }
 
+export interface Product {
+  id: string;
+  externalProductId?: string;
+  name: string;
+  subtitle?: string;
+  productType?: string;
+  designSku?: string;
+  baseSku?: string;
+  imagePath?: string;
+  imagePath2?: string;
+  imagePath3?: string;
+  productCost?: number;
+  sellingCost?: number;
+  active: boolean;
+  displayOrder?: number;
+  createdAt?: string;
+  productDetails?: string;
+  productDisplayName?: string;
+}
+
+export interface Order {
+  id: string;
+  createdAt?: string;
+  orderNumber?: string;
+  productId?: string;
+  productName?: string;
+  unitPriceInr?: number;
+  quantity: number;
+  totalAmountInr?: number;
+  customerName: string;
+  customerPhone: string;
+  customerEmail?: string;
+  shippingAddressLine1: string;
+  shippingAddressLine2?: string;
+  city: string;
+  state: string;
+  pincode: string;
+  landmark?: string;
+  notes?: string;
+  paymentStatus?: string;
+  paymentProvider?: string;
+  paymentLinkUsed?: string;
+  status?: string;
+  adminNotes?: string;
+  razorpayOrderId?: string;
+  razorpayPaymentId?: string;
+  razorpaySignature?: string;
+  deliveryStatus?: string;
+  expectedDeliveryDate?: string;
+  trackingLink?: string;
+}
+
 export interface EmployeeSummary {
   id: string;
   name: string;

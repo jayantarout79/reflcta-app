@@ -7,6 +7,8 @@ export type Resource =
   | "leads"
   | "projects"
   | "tasks"
+  | "products"
+  | "orders"
   | "time"
   | "invoices"
   | "expenses"
@@ -39,6 +41,18 @@ const ROLE_MATRIX: Record<Resource, Record<Role, CrudAction[]>> = {
     viewer: READ,
   },
   tasks: {
+    admin: CRUD,
+    manager: CRUD,
+    employee: ["read", "update"],
+    viewer: READ,
+  },
+  products: {
+    admin: CRUD,
+    manager: CRUD,
+    employee: ["read", "update"],
+    viewer: READ,
+  },
+  orders: {
     admin: CRUD,
     manager: CRUD,
     employee: ["read", "update"],

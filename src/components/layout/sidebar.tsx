@@ -15,6 +15,7 @@ import {
   UserCircle,
   Bot,
   GraduationCap,
+  Truck,
 } from "lucide-react";
 import { canAccess, type Resource } from "@/lib/permissions";
 import type { Role } from "@/lib/types";
@@ -32,6 +33,8 @@ export const NAV_SECTIONS: {
       { label: "Leads", href: "/leads", icon: FolderKanban, resource: "leads" },
       { label: "Projects", href: "/projects", icon: Briefcase, resource: "projects" },
       { label: "Tasks", href: "/tasks", icon: FileStack, resource: "tasks" },
+      { label: "Products", href: "/products", icon: FolderKanban, resource: "products" },
+      { label: "Drop Shipping", href: "/drop-shipping", icon: Truck, resource: "orders" },
     ],
   },
   {

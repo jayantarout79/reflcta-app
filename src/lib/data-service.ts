@@ -6,6 +6,8 @@ import {
   demoFiles,
   demoInvoices,
   demoLeads,
+  demoOrders,
+  demoProducts,
   demoProjects,
   demoTasks,
   demoTimeEntries,
@@ -21,11 +23,13 @@ import {
   type Expense,
   type Invoice,
   type Lead,
+  type Order,
   type Project,
   type Task,
   type TimeEntry,
   type UserProfile,
   type StudentEnrollment,
+  type Product,
 } from "./types";
 import { getServiceRoleClient } from "./supabase/service";
 
@@ -299,6 +303,115 @@ const mapInvoiceRow = (row: InvoiceRow): Invoice => {
     total: computedTotal,
   };
 };
+
+type OrderRow = {
+  id: string;
+  created_at?: string | null;
+  order_number?: string | null;
+  product_id?: string | null;
+  product_name?: string | null;
+  unit_price_inr?: number | null;
+  quantity?: number | null;
+  total_amount_inr?: number | null;
+  customer_name: string;
+  customer_phone: string;
+  customer_email?: string | null;
+  shipping_address_line1: string;
+  shipping_address_line2?: string | null;
+  city: string;
+  state: string;
+  pincode: string;
+  landmark?: string | null;
+  notes?: string | null;
+  payment_status?: string | null;
+  payment_provider?: string | null;
+  payment_link_used?: string | null;
+  status?: string | null;
+  admin_notes?: string | null;
+  razorpay_order_id?: string | null;
+  razorpay_payment_id?: string | null;
+  razorpay_signature?: string | null;
+  delivery_status?: string | null;
+  expected_delivery_date?: string | null;
+  tracking_link?: string | null;
+};
+
+const mapOrderRow = (row: OrderRow): Order => {
+  const quantity = Number(row.quantity ?? 1) || 1;
+  const unitPrice = Number(row.unit_price_inr ?? 0) || 0;
+  const totalAmount = Number(row.total_amount_inr ?? unitPrice * quantity) || 0;
+  return {
+    id: row.id,
+    createdAt: row.created_at ?? undefined,
+    orderNumber: row.order_number ?? undefined,
+    productId: row.product_id ?? undefined,
+    productName: row.product_name ?? undefined,
+    unitPriceInr: unitPrice || undefined,
+    quantity,
+    totalAmountInr: totalAmount || undefined,
+    customerName: row.customer_name,
+    customerPhone: row.customer_phone,
+    customerEmail: row.customer_email ?? undefined,
+    shippingAddressLine1: row.shipping_address_line1,
+    shippingAddressLine2: row.shipping_address_line2 ?? undefined,
+    city: row.city,
+    state: row.state,
+    pincode: row.pincode,
+    landmark: row.landmark ?? undefined,
+    notes: row.notes ?? undefined,
+    paymentStatus: row.payment_status ?? undefined,
+    paymentProvider: row.payment_provider ?? undefined,
+    paymentLinkUsed: row.payment_link_used ?? undefined,
+    status: row.status ?? undefined,
+    adminNotes: row.admin_notes ?? undefined,
+    razorpayOrderId: row.razorpay_order_id ?? undefined,
+    razorpayPaymentId: row.razorpay_payment_id ?? undefined,
+    razorpaySignature: row.razorpay_signature ?? undefined,
+    deliveryStatus: row.delivery_status ?? undefined,
+    expectedDeliveryDate: row.expected_delivery_date ?? undefined,
+    trackingLink: row.tracking_link ?? undefined,
+  };
+};
+
+type ProductRow = {
+  id: string;
+  external_product_id?: string | null;
+  name: string;
+  subtitle?: string | null;
+  product_type?: string | null;
+  design_sku?: string | null;
+  base_sku?: string | null;
+  image_path?: string | null;
+  image_path2?: string | null;
+  image_path3?: string | null;
+  product_cost?: number | null;
+  selling_cost?: number | null;
+  active?: boolean | null;
+  display_order?: number | null;
+  created_at?: string | null;
+  product_details?: string | null;
+  product_display_name?: string | null;
+};
+
+const mapProductRow = (row: ProductRow): Product => ({
+  id: row.id,
+  externalProductId: row.external_product_id ?? undefined,
+  name: row.name,
+  subtitle: row.subtitle ?? undefined,
+  productType: row.product_type ?? undefined,
+  designSku: row.design_sku ?? undefined,
+  baseSku: row.base_sku ?? undefined,
+  imagePath: row.image_path ?? undefined,
+  imagePath2: row.image_path2 ?? undefined,
+  imagePath3: row.image_path3 ?? undefined,
+  productCost: row.product_cost ?? undefined,
+  sellingCost: row.selling_cost ?? undefined,
+  active: row.active ?? true,
+  displayOrder: row.display_order ?? undefined,
+  createdAt: row.created_at ?? undefined,
+  productDetails: row.product_details ?? undefined,
+  productDisplayName: row.product_display_name ?? undefined,
+});
 
 export async function getCurrentUserProfile(): Promise<UserProfile | null> {
   if (isDemoMode) return demoUser;
@@ -605,6 +718,36 @@ export async function getInvoices(): Promise<Invoice[]> {
     return demoInvoices;
   }
   return (data as InvoiceRow[]).map(mapInvoiceRow);
+}
+
+export async function getOrders(): Promise<Order[]> {
+  if (isDemoMode) return demoOrders;
+  const supabase = await createServerSupabaseClient();
+  if (!supabase) return demoOrders;
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error || !data) {
+    logError("Unable to fetch orders", error);
+    return demoOrders;
+  }
+  return (data as OrderRow[]).map(mapOrderRow);
+}
+
+export async function getProducts(): Promise<Product[]> {
+  if (isDemoMode) return demoProducts;
+  const supabase = await createServerSupabaseClient();
+  if (!supabase) return demoProducts;
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .order("display_order", { ascending: true });
+  if (error || !data) {
+    logError("Unable to fetch products", error);
+    return demoProducts;
+  }
+  return (data as ProductRow[]).map(mapProductRow);
 }
 
 export async function getExpenses(): Promise<Expense[]> {

@@ -38,6 +38,8 @@ export function formatDateTime(value?: string | Date | null) {
 export const STATUS_COLORS: Record<string, string> = {
   "In Progress": "bg-sky-50 text-sky-700",
   Completed: "bg-emerald-50 text-emerald-700",
+  Submitted: "bg-blue-50 text-blue-700",
+  Processing: "bg-indigo-50 text-indigo-700",
   Planned: "bg-indigo-50 text-indigo-700",
   "On Hold": "bg-amber-50 text-amber-700",
   Cancelled: "bg-rose-50 text-rose-700",
@@ -59,4 +61,7 @@ export const STATUS_COLORS: Record<string, string> = {
   Blocked: "bg-rose-50 text-rose-700",
   "On Leave": "bg-amber-50 text-amber-700",
   Exited: "bg-slate-200 text-slate-700",
+  "Pending Payment": "bg-amber-50 text-amber-700",
+  Shipped: "bg-cyan-50 text-cyan-700",
+  Delivered: "bg-emerald-50 text-emerald-700",
 };

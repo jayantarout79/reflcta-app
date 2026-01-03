@@ -123,6 +123,44 @@ export const expenseFormSchema = z.object({
   notes: z.string().optional(),
 });
 
+export const productFormSchema = z.object({
+  id: z.string().optional(),
+  externalProductId: z.string().trim().optional(),
+  name: z.string().trim().min(2),
+  subtitle: z.string().trim().optional(),
+  productType: z.string().trim().optional(),
+  designSku: z.string().trim().optional(),
+  baseSku: z.string().trim().optional(),
+  imagePath: z.union([z.string().url().trim(), z.literal("")]).optional(),
+  imagePath2: z.union([z.string().url().trim(), z.literal("")]).optional(),
+  imagePath3: z.union([z.string().url().trim(), z.literal("")]).optional(),
+  productCost: z.number().nonnegative().optional(),
+  sellingCost: z.number().nonnegative().optional(),
+  active: z.boolean().optional(),
+  displayOrder: z.number().int().optional(),
+  productDetails: z.string().trim().optional(),
+  productDisplayName: z.string().trim().optional(),
+});
+
+export const orderUpdateSchema = z.object({
+  id: z.string().trim().min(1),
+  customerName: z.string().trim().min(2),
+  customerPhone: z.string().trim().min(4),
+  customerEmail: z.union([z.string().trim().email(), z.literal("")]).optional(),
+  shippingAddressLine1: z.string().trim().min(2),
+  shippingAddressLine2: z.string().trim().optional(),
+  city: z.string().trim().min(2),
+  state: z.string().trim().min(2),
+  pincode: z.string().trim().min(4),
+  landmark: z.string().trim().optional(),
+  adminNotes: z.string().trim().optional(),
+  paymentStatus: z.string().trim().optional(),
+  status: z.string().trim().optional(),
+  deliveryStatus: z.string().trim().optional(),
+  expectedDeliveryDate: z.string().trim().optional(),
+  trackingLink: z.string().trim().optional(),
+});
+
 export const employeeFormSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(2),
