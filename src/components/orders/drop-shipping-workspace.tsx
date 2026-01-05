@@ -72,8 +72,26 @@ export function DropShippingWorkspace({
   );
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [paymentStatusFilter, setPaymentStatusFilter] = useState<string>("all");
+  const [startDateFilter, setStartDateFilter] = useState("");
+  const [endDateFilter, setEndDateFilter] = useState("");
   const [search, setSearch] = useState("");
   const [isPending, startTransition] = useTransition();
+
+  const startDateValue = useMemo(() => {
+    if (!startDateFilter) return null;
+    const parsed = new Date(startDateFilter);
+    if (Number.isNaN(parsed.getTime())) return null;
+    parsed.setHours(0, 0, 0, 0);
+    return parsed;
+  }, [startDateFilter]);
+
+  const endDateValue = useMemo(() => {
+    if (!endDateFilter) return null;
+    const parsed = new Date(endDateFilter);
+    if (Number.isNaN(parsed.getTime())) return null;
+    parsed.setHours(23, 59, 59, 999);
+    return parsed;
+  }, [endDateFilter]);
 
   const filteredOrders = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -86,9 +104,18 @@ export function DropShippingWorkspace({
         formatStatusLabel(order.paymentStatus).toLowerCase() ===
           formatStatusLabel(paymentStatusFilter).toLowerCase();
       const matchesSearch = term.length === 0 || (order.orderNumber ?? order.id).toLowerCase().includes(term);
-      return matchesStatus && matchesPayment && matchesSearch;
+      const matchesDateRange = (() => {
+        if (!startDateValue && !endDateValue) return true;
+        if (!order.createdAt) return false;
+        const createdAt = new Date(order.createdAt);
+        if (Number.isNaN(createdAt.getTime())) return false;
+        if (startDateValue && createdAt < startDateValue) return false;
+        if (endDateValue && createdAt > endDateValue) return false;
+        return true;
+      })();
+      return matchesStatus && matchesPayment && matchesSearch && matchesDateRange;
     });
-  }, [orders, paymentStatusFilter, search, statusFilter]);
+  }, [orders, paymentStatusFilter, search, statusFilter, startDateValue, endDateValue]);
 
   const selectedOrder = useMemo(
     () => filteredOrders.find((order) => order.id === selectedOrderId) ?? null,
@@ -200,6 +227,26 @@ export function DropShippingWorkspace({
                 className="mt-1"
                 placeholder="e.g., ORD-1001"
               />
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label>Start date (created_at)</label>
+                <input
+                  type="date"
+                  value={startDateFilter}
+                  onChange={(e) => setStartDateFilter(e.target.value)}
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <label>End date (created_at)</label>
+                <input
+                  type="date"
+                  value={endDateFilter}
+                  onChange={(e) => setEndDateFilter(e.target.value)}
+                  className="mt-1"
+                />
+              </div>
             </div>
           </div>
         </div>
