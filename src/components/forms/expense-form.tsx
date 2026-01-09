@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { upsertExpense, type ExpenseFormValues } from "@/actions/finance";
 import { expenseFormSchema } from "@/lib/validation";
-import type { Client, Project } from "@/lib/types";
+import type { Client, Project, Vendor } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 
 const categories = ["Software", "Contractor", "Travel", "Salary", "Misc"] as const;
@@ -19,11 +19,13 @@ const normalizeDateInput = (value?: string) => {
 export function ExpenseForm({
   clients,
   projects,
+  vendors,
   defaultValues,
   onSuccess,
 }: {
   clients: Client[];
   projects: Project[];
+  vendors: Vendor[];
   defaultValues?: Partial<ExpenseFormValues>;
   onSuccess?: () => void;
 }) {
@@ -155,11 +157,17 @@ export function ExpenseForm({
       </div>
       <div>
         <label className="text-sm font-medium text-zinc-600">Vendor</label>
-        <input
+        <select
           {...form.register("vendor")}
           className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm"
-          placeholder="Vendor / payee"
-        />
+        >
+          <option value="">None</option>
+          {vendors.map((vendor) => (
+            <option key={vendor.id} value={vendor.name}>
+              {vendor.name}
+            </option>
+          ))}
+        </select>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
         <div>

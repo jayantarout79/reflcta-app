@@ -4,6 +4,7 @@ type CrudAction = "read" | "create" | "update" | "delete";
 
 export type Resource =
   | "clients"
+  | "vendors"
   | "leads"
   | "projects"
   | "tasks"
@@ -23,6 +24,12 @@ const READ: CrudAction[] = ["read"];
 
 const ROLE_MATRIX: Record<Resource, Record<Role, CrudAction[]>> = {
   clients: {
+    admin: CRUD,
+    manager: CRUD,
+    employee: READ,
+    viewer: READ,
+  },
+  vendors: {
     admin: CRUD,
     manager: CRUD,
     employee: READ,

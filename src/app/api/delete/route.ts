@@ -8,6 +8,7 @@ import { deleteExpense } from "@/actions/finance";
 import { deleteEmployee } from "@/actions/hr";
 import { deleteDocument } from "@/actions/files";
 import { deleteStudentEnrollment } from "@/actions/enrollments";
+import { deleteVendor } from "@/actions/vendors";
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -30,9 +31,9 @@ export async function POST(request: Request) {
       case "task":
         result = await deleteTask(payload.id as string, payload.projectId as string | undefined);
         break;
-      case "expense":
-        result = await deleteExpense(payload.id as string);
-        break;
+    case "expense":
+      result = await deleteExpense(payload.id as string);
+      break;
     case "employee":
       result = await deleteEmployee(payload.id as string);
       break;
@@ -41,6 +42,9 @@ export async function POST(request: Request) {
       break;
     case "studentEnrollment":
       result = await deleteStudentEnrollment(payload.id as number);
+      break;
+    case "vendor":
+      result = await deleteVendor(payload.id as string);
       break;
       default:
         result = { success: false, message: "Unsupported delete entity." };

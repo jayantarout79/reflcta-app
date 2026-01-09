@@ -49,6 +49,34 @@ export const clientFormSchema = z.object({
   tags: z.array(z.string()).optional(),
 });
 
+export const vendorFormSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(2),
+  company: z.string().optional(),
+  website: z
+    .string()
+    .trim()
+    .refine((val) => {
+      if (!val) return true;
+      try {
+        new URL(val);
+        return true;
+      } catch {
+        try {
+          new URL(`https://${val}`);
+          return true;
+        } catch {
+          return false;
+        }
+      }
+    }, { message: "Please provide a valid URL (with or without https://)" })
+    .optional(),
+  email: z.string().email().optional(),
+  phone: z.string().optional(),
+  country: z.string().optional(),
+  notes: z.string().optional(),
+});
+
 export const projectFormSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(2),

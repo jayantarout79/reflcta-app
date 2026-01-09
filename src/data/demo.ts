@@ -12,6 +12,7 @@ import {
   type Expense,
   type Order,
   type Product,
+  type Vendor,
   type UserProfile,
 } from "@/lib/types";
 
@@ -422,6 +423,25 @@ export const demoClients: Client[] = [
     timezone: "PST",
     industry: "Retail",
     relationshipStatus: "Active",
+  },
+];
+
+export const demoVendors: Vendor[] = [
+  {
+    id: "vendor-1",
+    name: "Scale GPU Cloud",
+    company: "Scale Compute",
+    email: "billing@scalecloud.example",
+    country: "USA",
+    website: "https://scalecloud.example",
+    notes: "Primary GPU provider.",
+  },
+  {
+    id: "vendor-2",
+    name: "Delta Airlines",
+    company: "Delta Air Lines",
+    email: "receipts@delta.example",
+    country: "USA",
   },
 ];
 

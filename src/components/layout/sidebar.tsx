@@ -7,6 +7,7 @@ import {
   type LucideIcon,
   Gauge,
   Users,
+  Building2,
   Briefcase,
   FolderKanban,
   FileStack,
@@ -30,6 +31,7 @@ export const NAV_SECTIONS: {
     items: [
       { label: "Dashboard", href: "/dashboard", icon: Gauge, resource: "analytics" },
       { label: "Clients", href: "/clients", icon: Users, resource: "clients" },
+      { label: "Vendors", href: "/vendors", icon: Building2, resource: "vendors" },
       { label: "Leads", href: "/leads", icon: FolderKanban, resource: "leads" },
       { label: "Projects", href: "/projects", icon: Briefcase, resource: "projects" },
       { label: "Tasks", href: "/tasks", icon: FileStack, resource: "tasks" },

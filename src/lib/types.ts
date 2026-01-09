@@ -48,6 +48,17 @@ export interface Client {
   files?: DocumentFile[];
 }
 
+export interface Vendor {
+  id: string;
+  name: string;
+  company?: string;
+  email?: string;
+  phone?: string;
+  country?: string;
+  website?: string;
+  notes?: string;
+}
+
 export interface Project {
   id: string;
   name: string;

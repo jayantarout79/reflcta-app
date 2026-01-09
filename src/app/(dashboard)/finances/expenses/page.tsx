@@ -4,6 +4,7 @@ import {
   getClients,
   getExpenses,
   getProjects,
+  getVendors,
   getCurrentUserProfile,
 } from "@/lib/data-service";
 import { canAccess } from "@/lib/permissions";
@@ -11,10 +12,11 @@ import { currencyFormatter, formatDate } from "@/lib/utils";
 import { OutstandingExpensesChart } from "@/components/expenses/outstanding-chart";
 
 export default async function ExpensesPage() {
-  const [expenses, clients, projects, user] = await Promise.all([
+  const [expenses, clients, projects, vendors, user] = await Promise.all([
     getExpenses(),
     getClients(),
     getProjects(),
+    getVendors(),
     getCurrentUserProfile(),
   ]);
   const total = expenses.reduce((sum, expense) => sum + expense.amount, 0);
@@ -45,7 +47,7 @@ export default async function ExpensesPage() {
         <p className="text-sm text-[var(--color-muted)]">{currencyFormatter(total)} spent</p>
       </div>
       {canCreate && (
-        <ExpenseForm clients={clients} projects={projects} />
+        <ExpenseForm clients={clients} projects={projects} vendors={vendors} />
       )}
       <div className="card p-6">
         <h2 className="text-2xl font-semibold text-[var(--color-foreground)]">Expense log</h2>
@@ -126,6 +128,7 @@ export default async function ExpensesPage() {
                     <ExpenseForm
                       clients={clients}
                       projects={projects}
+                      vendors={vendors}
                       defaultValues={{
                         id: expense.id,
                         date: expense.date ? expense.date.slice(0, 10) : undefined,

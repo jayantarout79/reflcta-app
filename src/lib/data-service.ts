@@ -12,6 +12,7 @@ import {
   demoTasks,
   demoTimeEntries,
   demoUser,
+  demoVendors,
 } from "@/data/demo";
 import { isDemoMode } from "./env";
 import { createServerSupabaseClient } from "./supabase/server";
@@ -30,6 +31,7 @@ import {
   type UserProfile,
   type StudentEnrollment,
   type Product,
+  type Vendor,
 } from "./types";
 import { getServiceRoleClient } from "./supabase/service";
 
@@ -98,6 +100,28 @@ const mapClientRow = (row: ClientRow): Client => ({
   projects: row.projects ?? [],
   invoices: row.invoices ?? [],
   files: row.files ?? [],
+});
+
+type VendorRow = {
+  id: string;
+  name: string;
+  company?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  country?: string | null;
+  website?: string | null;
+  notes?: string | null;
+};
+
+const mapVendorRow = (row: VendorRow): Vendor => ({
+  id: row.id,
+  name: row.name,
+  company: row.company ?? undefined,
+  email: row.email ?? undefined,
+  phone: row.phone ?? undefined,
+  country: row.country ?? undefined,
+  website: row.website ?? undefined,
+  notes: row.notes ?? undefined,
 });
 
 type DocumentRow = {
@@ -521,6 +545,21 @@ export async function getClients(): Promise<Client[]> {
     return demoClients;
   }
   return data.map(mapClientRow);
+}
+
+export async function getVendors(): Promise<Vendor[]> {
+  if (isDemoMode) return demoVendors;
+  const supabase = await createServerSupabaseClient();
+  if (!supabase) return demoVendors;
+  const { data, error } = await supabase
+    .from("vendors")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error || !data) {
+    logError("Unable to fetch vendors", error);
+    return demoVendors;
+  }
+  return (data as VendorRow[]).map(mapVendorRow);
 }
 
 export async function getClientById(id: string): Promise<Client | null> {
