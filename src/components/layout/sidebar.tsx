@@ -17,6 +17,7 @@ import {
   Bot,
   GraduationCap,
   Truck,
+  MessageSquareText,
 } from "lucide-react";
 import { canAccess, type Resource } from "@/lib/permissions";
 import type { Role } from "@/lib/types";
@@ -30,6 +31,12 @@ export const NAV_SECTIONS: {
     label: "Operations",
     items: [
       { label: "Dashboard", href: "/dashboard", icon: Gauge, resource: "analytics" },
+      {
+        label: "Analytics Chat",
+        href: "/analytics/chat",
+        icon: MessageSquareText,
+        resource: "analytics",
+      },
       { label: "Clients", href: "/clients", icon: Users, resource: "clients" },
       { label: "Vendors", href: "/vendors", icon: Building2, resource: "vendors" },
       { label: "Leads", href: "/leads", icon: FolderKanban, resource: "leads" },

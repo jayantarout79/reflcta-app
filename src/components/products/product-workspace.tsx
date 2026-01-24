@@ -234,6 +234,8 @@ export function ProductWorkspace({ products, canManage }: { products: Product[];
         )}
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          {/* hidden field to make sure updates carry the product id */}
+          <input type="hidden" {...form.register("id")} />
           <div className="grid gap-4 md:grid-cols-2">
             <div>
               <label>Name</label>

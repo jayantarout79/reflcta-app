@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/generate-semantic.mjs && next build",
     "start": "next start",
+    "generate:semantic": "node scripts/generate-semantic.mjs",
     "lint": "eslint"
   },
   "dependencies": {

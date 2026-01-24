@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# analytics artifacts
+/public/semantic.json
+
 # production
 /build
 
